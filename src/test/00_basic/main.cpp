@@ -1,6 +1,5 @@
-#include <UScene/core/SObj.h>
+#include <UScene/core/Scene.h>
 #include <UScene/core/Transform.h>
-#include <UECS/core/World.h>
 
 #include <iostream>
 
@@ -8,11 +7,11 @@ using namespace std;
 using namespace Ubpa;
 
 int main() {
-	World w;
+	Scene scene("scene");
 
-	auto [e0, sobj0, tsfm0] = w.CreateEntity<Cmpt::SObj, Cmpt::Transform>();
-	auto [e1, sobj1, tsfm1] = w.CreateEntity<Cmpt::SObj, Cmpt::Transform>();
-	auto [e2, sobj2, tsfm2] = w.CreateEntity<Cmpt::SObj, Cmpt::Transform>();
+	auto [sobj0, tsfm0] = scene.CreateSObj<Cmpt::Transform>();
+	auto [sobj1, tsfm1] = scene.CreateSObj<Cmpt::Transform>();
+	auto [sobj2, tsfm2] = scene.CreateSObj<Cmpt::Transform>();
 
 	sobj0->AddChild(sobj1);
 	sobj0->AddChild(sobj2);

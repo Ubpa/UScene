@@ -10,6 +10,7 @@ namespace Ubpa::detail::UScene {
 		static_assert(std::is_default_constructible_v<T>);
 
 		Dirty(std::function<void(T & t)> update) : update{ update } {}
+
 		void SetDirty() { dirty = true; }
 
 		const T& Get() const {
