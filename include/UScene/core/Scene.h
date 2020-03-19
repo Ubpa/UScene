@@ -2,21 +2,22 @@
 
 #include "SObj.h"
 
-#include <UECS/core/World.h>
+#include <UECS/World.h>
 
 namespace Ubpa {
 	class Scene : public World {
 	public:
 		Scene(const std::string& name);
+		~Scene();
+
+		SObj* Root() { return root; }
+		const SObj* Root() const { return root; }
 
 		template<typename... Cmpts>
-		std::tuple<Cmpt::SObj*, Cmpts *...> CreateSObj(Cmpt::SObj* parent = nullptr);
-
-		Cmpt::SObj* Root() { return root; }
-		const Cmpt::SObj* Root() const { return root; }
+		std::tuple<SObj*, Cmpts *...> CreateSObj(const std::string& name, SObj* parent = nullptr);
 
 	private:
-		Cmpt::SObj* root;
+		SObj* const root;
 
 		using World::CreateEntity;
 	};

@@ -1,9 +1,11 @@
-#include <UScene/core/Transform.h>
+#include <UScene/core/Cmpt/Transform.h>
+
+#include <UScene/core/SObj.h>
 
 using namespace Ubpa;
 
-Cmpt::Transform::Transform(Entity* entity)
-	: ECmpt{ entity }, tsfm{[this](transformf& tsfm) { tsfm = transformf(pos, scale, rot); }} { }
+Cmpt::Transform::Transform()
+	: tsfm{[this](transformf& tsfm) { tsfm = transformf(pos, scale, rot); }} { }
 
 
 void Cmpt::Transform::SetPosition(const pointf3& pos) {
@@ -26,4 +28,14 @@ void Cmpt::Transform::Init(const pointf3& pos, const scalef3& scale, const quatf
 	const_cast<scalef3&>(this->scale) = scale;
 	const_cast<quatf&>(this->rot) = rot;
 	tsfm.SetDirty();
+}
+
+const transformf Cmpt::Transform::GetLocalToWorldMatrix() const {
+	auto tsfm = transformf::eye();
+	for (auto cur = this->GetSObj(); cur != nullptr; cur = cur->Parent()) {
+		auto cmpt = cur->Get<Cmpt::Transform>();
+		if (cmpt)
+			tsfm = cmpt->tsfm.Get() * tsfm;
+	}
+	return tsfm;
 }

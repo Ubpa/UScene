@@ -14,7 +14,6 @@ Ubpa_AddTarget(MODE "LIB"
 	LIBS
 		"Ubpa::${ugm_package_name}_core"
 		"Ubpa::${uecs_package_name}_core"
-		"Ubpa::${uecs_package_name}_cmpt"
 		"Ubpa::${udp_package_name}_core"
 		"Ubpa::${utemplate_package_name}_core"
 )

@@ -1,13 +1,16 @@
 #pragma once
 
+#include "../Component.h"
+
 namespace Ubpa {
 	template<typename... Cmpts>
-	std::tuple<Cmpt::SObj*, Cmpts *...> Scene::CreateSObj(Cmpt::SObj* parent) {
-		static_assert(!(std::is_same_v<Cmpts, Cmpt::SObj> || ...));
-		static_assert((std::is_base_of_v<Cmpt::ECmpt, Cmpts> && ...));
+	std::tuple<SObj*, Cmpts *...> Scene::CreateSObj(const std::string& name, SObj* parent) {
+		static_assert((std::is_base_of_v<Component, Cmpts> && ...));
+		assert(!parent || parent->IsDescendantOf(root));
 
-		auto rst = World::CreateEntity<Cmpt::SObj, Cmpts ...>();
-		auto sobj = std::get<Cmpt::SObj*>(rst);
+		auto rst = World::CreateEntity<Cmpts ...>();
+		auto entity = std::get<Entity*>(rst);
+		auto sobj = new SObj(entity, name);
 
 		(parent ? parent : root)->AddChild(sobj);
 

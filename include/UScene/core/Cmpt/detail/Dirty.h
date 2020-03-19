@@ -16,14 +16,12 @@ namespace Ubpa::detail::UScene {
 		const T& Get() const {
 			if (dirty) {
 				dirty = false;
-				update(t);
+				//update(t);
 			}
 			return t;
 		}
 
-		operator T() const {
-			return Get();
-		}
+		operator T() const { return Get(); }
 
 	private:
 		const std::function<void(T & t)> update;

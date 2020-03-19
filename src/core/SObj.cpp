@@ -1,15 +1,40 @@
 #include <UScene/core/SObj.h>
 
-#include <UScene/core/Transform.h>
+#include <UScene/core/Cmpt/Transform.h>
 
 using namespace Ubpa;
+using namespace std;
 
-const transformf Cmpt::SObj::GetLocalToWorldMatrix() const {
-	auto tsfm = transformf::eye();
-	for (auto cur = this; cur != nullptr; cur = cur->Parent()) {
-		auto cmpt = cur->GetEntity()->Get<Cmpt::Transform>();
-		if (cmpt)
-			tsfm = cmpt->tsfm.Get() * tsfm;
-	}
-	return tsfm;
+SObj::SObj(Entity* entity, const string& name)
+	: entity(entity), name(name) {}
+
+SObj::~SObj() {
+	entity->Release();
+	for (auto child : children)
+		delete child;
+}
+
+void SObj::AddChild(SObj* sobj) {
+	assert(sobj != this);
+	if (sobj->parent)
+		sobj->parent->children.erase(sobj);
+
+	sobj->parent = this;
+	children.insert(sobj);
+}
+
+void SObj::ReleaseChild(SObj* sobj) {
+	assert(sobj->parent == this);
+	children.erase(sobj);
+	delete sobj;
+}
+
+bool SObj::IsDescendantOf(SObj* impl) const {
+	if (impl == this)
+		return true;
+
+	if (parent == nullptr)
+		return false;
+
+	return parent->IsDescendantOf(impl);
 }
