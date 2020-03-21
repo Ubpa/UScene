@@ -53,9 +53,9 @@ endif()
 # 修改默认的安装路径前缀
 Ubpa_InitInstallPrefix()
 
-Ubpa_AddDep(UDP 0.2.0)
+Ubpa_AddDep(UDP 0.2.2)
 Ubpa_AddDep(UECS 0.3.2)
-Ubpa_AddDep(UGM 0.2.1)
+Ubpa_AddDep(UGM 0.3.0)
 Ubpa_AddDep(UTemplate 0.2.0)
 
 Ubpa_AddSubDirsRec(src)

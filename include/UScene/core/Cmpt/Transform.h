@@ -1,10 +1,10 @@
 #pragma once
 
-#include "detail/Dirty.h"
-
 #include "../Component.h"
 
 #include <UGM/transform.h>
+
+#include <UDP/Basic/Dirty.h>
 
 namespace Ubpa::Cmpt {
 	class Transform : public Component {
@@ -13,7 +13,7 @@ namespace Ubpa::Cmpt {
 		const scalef3 scale{ 1.f };
 		const quatf rot{ quatf::identity() };
 
-		detail::UScene::Dirty<transformf> tsfm;
+		Dirty<transformf> tsfm;
 
 		Transform();
 
