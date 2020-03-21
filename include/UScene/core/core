@@ -1,0 +1,20 @@
+#pragma once
+
+#include "SObj.h"
+#include "Scene.h"
+#include "Component.h"
+
+#include "Cmpt/Camera.h"
+#include "Cmpt/Geometry.h"
+#include "Cmpt/Light.h"
+#include "Cmpt/Material.h"
+#include "Cmpt/Transform.h"
+
+#include "Light/Light.h"
+#include "Light/PointLight.h"
+
+#include "Material/Material.h"
+#include "Material/Diffuse.h"
+
+#include "Primitive/Primitive.h"
+#include "Primitive/Sphere.h"

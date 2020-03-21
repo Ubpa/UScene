@@ -10,22 +10,22 @@ SObj::SObj(Entity* entity, const string& name)
 
 SObj::~SObj() {
 	entity->Release();
-	for (auto child : children)
+	for (const auto& child : children.get())
 		delete child;
 }
 
 void SObj::AddChild(SObj* sobj) {
 	assert(sobj != this);
 	if (sobj->parent)
-		sobj->parent->children.erase(sobj);
+		sobj->parent->children->erase(sobj);
 
 	sobj->parent = this;
-	children.insert(sobj);
+	children->insert(sobj);
 }
 
 void SObj::ReleaseChild(SObj* sobj) {
 	assert(sobj->parent == this);
-	children.erase(sobj);
+	children->erase(sobj);
 	delete sobj;
 }
 

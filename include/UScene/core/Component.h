@@ -1,5 +1,7 @@
 #pragma once
 
+#include <UDP/Basic/Read.h>
+
 namespace Ubpa {
 	class SObj;
 
@@ -8,11 +10,6 @@ namespace Ubpa {
 		Component() = default;
 		virtual ~Component() = default;
 
-		SObj* GetSObj() { return sobj; }
-		const SObj* GetSObj() const { return sobj; }
-
-	private:
-		SObj* sobj{ nullptr };
-		friend class SObj;
+		Read<SObj, SObj*> sobj;
 	};
 }

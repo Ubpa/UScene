@@ -4,6 +4,8 @@
 
 #include <UGM/transform.h>
 
+#include <UDP/Basic/Read.h>
+
 #include <string>
 
 namespace Ubpa {
@@ -12,10 +14,8 @@ namespace Ubpa {
 	class SObj {
 	public:
 		std::string name;
-
-		// children and parent
-		SObj* Parent() const noexcept { return parent; }
-		std::set<SObj*> Children() const noexcept { return children; }
+		Read<SObj, SObj*> parent{ nullptr };
+		Read<SObj, std::set<SObj*>> children;
 
 		void AddChild(SObj* sobj);
 		void ReleaseChild(SObj* sobj);
@@ -41,9 +41,6 @@ namespace Ubpa {
 
 		bool IsAlive() const noexcept { return entity->IsAlive(); }
 
-	private:
-		SObj* parent{ nullptr };
-		std::set<SObj*> children;
 	private:
 		SObj(Entity* entity, const std::string& name);
 		virtual ~SObj();

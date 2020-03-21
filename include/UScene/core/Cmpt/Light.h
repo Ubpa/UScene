@@ -4,15 +4,17 @@
 
 #include "../Light/Light.h"
 
+#include <UDP/Basic/Read.h>
+
 namespace Ubpa::Cmpt {
 
 	class Light : public Component {
 	public:
-		Ubpa::Light * const volatile light{ nullptr };
+		Read<Light, Ubpa::Light*> light{ nullptr };
 
 		void SetLight(Ubpa::Light* light) {
 			delete this->light;
-			const_cast<Ubpa::Light*&>(this->light) = light;
+			this->light = light;
 		}
 	};
 }

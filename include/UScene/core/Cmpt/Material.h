@@ -4,14 +4,16 @@
 
 #include "../Material/Material.h"
 
+#include <UDP/Basic/Read.h>
+
 namespace Ubpa::Cmpt {
 	class Material : public Component {
 	public:
-		Ubpa::Material* const volatile material{ nullptr };
+		Read<Material, Ubpa::Material*> material{ nullptr };
 
 		void SetMaterial(Ubpa::Material* material) {
 			delete this->material;
-			const_cast<Ubpa::Material*&>(this->material) = material;
+			this->material = material;
 		}
 	};
 }

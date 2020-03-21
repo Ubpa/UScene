@@ -12,7 +12,7 @@ namespace Ubpa {
 		auto entity = std::get<Entity*>(rst);
 		auto sobj = new SObj(entity, name);
 
-		(parent ? parent : root)->AddChild(sobj);
+		(parent ? parent : root.get())->AddChild(sobj);
 
 		return { sobj, std::get<Cmpts*>(rst)... };
 	}

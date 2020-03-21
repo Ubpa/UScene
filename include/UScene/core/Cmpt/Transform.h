@@ -5,13 +5,14 @@
 #include <UGM/transform.h>
 
 #include <UDP/Basic/Dirty.h>
+#include <UDP/Basic/Read.h>
 
 namespace Ubpa::Cmpt {
 	class Transform : public Component {
 	public:
-		const pointf3 pos{ 0.f };
-		const scalef3 scale{ 1.f };
-		const quatf rot{ quatf::identity() };
+		Read<Transform, pointf3> pos{ 0.f };
+		Read<Transform, scalef3> scale{ 1.f };
+		Read<Transform, quatf> rot{ quatf::identity() };
 
 		Dirty<transformf> tsfm;
 
