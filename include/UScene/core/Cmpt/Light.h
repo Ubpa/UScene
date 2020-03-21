@@ -2,7 +2,7 @@
 
 #include "../Component.h"
 
-namespace Ubpa { class Light; }
+#include "../Light/Light.h"
 
 namespace Ubpa::Cmpt {
 

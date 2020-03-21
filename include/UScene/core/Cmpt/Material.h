@@ -2,10 +2,9 @@
 
 #include "../Component.h"
 
-namespace Ubpa { class Material; }
+#include "../Material/Material.h"
 
 namespace Ubpa::Cmpt {
-
 	class Material : public Component {
 	public:
 		Ubpa::Material* const volatile material{ nullptr };

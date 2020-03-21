@@ -2,6 +2,8 @@
 
 #include "Light.h"
 
+#include <UGM/rgb.h>
+
 namespace Ubpa {
 	struct PointLight : Light {
 		// point light's luminance : intensity * color * delta(A)

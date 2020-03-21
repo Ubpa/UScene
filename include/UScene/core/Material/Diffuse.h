@@ -2,6 +2,8 @@
 
 #include "Material.h"
 
+#include <UGM/rgb.h>
+
 namespace Ubpa {
 	struct Diffuse : Material {
 		rgbf albedo;

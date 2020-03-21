@@ -3,7 +3,6 @@
 #include "../Component.h"
 
 #include <UGM/ray.h>
-#include <UDP/Basic/Dirty.h>
 
 namespace Ubpa::Cmpt {
 	class Camera : public Component {

@@ -2,10 +2,9 @@
 
 #include "../Component.h"
 
-namespace Ubpa { class Primitive; }
+#include "../Primitive/Primitive.h"
 
 namespace Ubpa::Cmpt {
-
 	class Geometry : public Component {
 	public:
 		Primitive* const volatile primitive{ nullptr };
