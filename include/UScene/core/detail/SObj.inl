@@ -19,7 +19,7 @@ namespace Ubpa {
 	Cmpt* SObj::GetOrAttach() {
 		auto cmpt = Get<Cmpt>();
 		if (!cmpt) {
-			cmpt = Attach<Cmpt>();
+			std::tie(cmpt) = Attach<Cmpt>();
 			cmpt->sobj = this;
 		}
 		return cmpt;
@@ -29,8 +29,7 @@ namespace Ubpa {
 	std::tuple<Cmpts *...> SObj::Attach() {
 		static_assert((std::is_base_of_v<Component, Cmpts> && ...));
 		auto cmpts = entity->Attach<Cmpts...>();
-		for (auto cmpt : cmpts)
-			cmpt->sobj = this;
+		((std::get<Cmpts*>(cmpts)->sobj = this), ...);
 		return cmpts;
 	}
 

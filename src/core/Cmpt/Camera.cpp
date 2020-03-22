@@ -1,5 +1,8 @@
 #include <UScene/core/Cmpt/Camera.h>
 
+#include <UScene/core/SObj.h>
+#include <UScene/core/Cmpt/Transform.h>
+
 using namespace Ubpa;
 
 void Cmpt::Camera::SetFOV(float fov) {
@@ -12,14 +15,17 @@ void Cmpt::Camera::SetAR(float ar) {
 	Update();
 }
 
-void Cmpt::Camera::Init(float fov, float ar, const pointf3& pos, const vecf3& front, const vecf3& worldUp) {
+void Cmpt::Camera::Init(float fov, float ar) {
 	this->fov = fov;
 	this->ar = ar;
 	this->pos = pos;
 
-	this->worldUp = worldUp.normalize();
-	this->front = front.normalize();
-	assert(this->worldUp != this->front);
+	auto modelMatrix = sobj.get()->GetOrAttach<Cmpt::Transform>()->GetLocalToWorldMatrix();
+	front = (modelMatrix * normalf{ 0.f,0.f,-1.f }).normalize().cast_to<vecf3>();
+
+	assert(worldUp != front);
+
+	Update();
 }
 
 void Cmpt::Camera::Update() {

@@ -13,10 +13,7 @@ namespace Ubpa::Cmpt {
 
 		void SetFOV(float fov);
 		void SetAR(float ar);
-		void Init(float fov, float ar,
-			const pointf3& pos,
-			const vecf3& front,
-			const vecf3& worldUp = vecf3{ 0,1,0 });
+		void Init(float fov, float ar); // auto set pose
 
 		// call Init() before calling GenRay
 		rayf3 GenRay(float u, float v) const {
@@ -27,7 +24,7 @@ namespace Ubpa::Cmpt {
 		// the imaging plane is 1m away
 		pointf3 pos; // camera position
 		vecf3 front; // normal
-		vecf3 worldUp; // world
+		const vecf3 worldUp{ 0.f,1.f,0.f }; // world upward
 
 		// update posToLBCorner, right and up when fov, ar, pos, front and worldUp is set
 		void Update();

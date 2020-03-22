@@ -17,7 +17,6 @@ public:
 		VarPtrVisitor<VarSerializer>::RegistC<
 			float,
 			string,
-			array<float, 3>,
 			set<SObj*>,
 			SObj*,
 			vecf3,
@@ -64,6 +63,7 @@ protected:
 		else
 			cout << p;
 	}
+
 	template<typename T>
 	void ImplVisit(T& p) { cout << p; }
 	template<typename T>
@@ -72,15 +72,6 @@ protected:
 			Visit(p);
 		else
 			cout << p;
-	}
-
-	template<typename T, size_t N>
-	void ImplVisit(const array<T, N>& p) {
-		cout << "[";
-		for (size_t i = 0; i < N - 1; i++)
-			cout << p[i] << ",";
-		cout << p.back();
-		cout << "]";
 	}
 
 	template<typename T>
