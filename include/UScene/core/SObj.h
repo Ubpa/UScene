@@ -41,7 +41,7 @@ namespace Ubpa {
 
 		bool IsAlive() const noexcept { return entity->IsAlive(); }
 
-	private:
+	protected:
 		SObj(Entity* entity, const std::string& name);
 		virtual ~SObj();
 		Entity* entity;
