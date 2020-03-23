@@ -15,5 +15,13 @@ namespace Ubpa::Cmpt {
 			delete this->primitive;
 			this->primitive = primitive;
 		}
+
+		Geometry() = default;
+		virtual ~Geometry() { delete primitive; }
+
+		Geometry(Geometry && geo) noexcept : Component(geo) {
+			primitive = geo.primitive;
+			geo.primitive = nullptr;
+		}
 	};
 }

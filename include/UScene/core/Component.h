@@ -7,9 +7,10 @@ namespace Ubpa {
 
 	class Component {
 	public:
+		Read<SObj, SObj*> sobj{ nullptr };
+
+	protected:
 		Component() = default;
 		virtual ~Component() = default;
-
-		Read<SObj, SObj*> sobj;
 	};
 }

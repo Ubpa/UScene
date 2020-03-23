@@ -10,11 +10,11 @@
 #include <rapidjson/stringbuffer.h>
 
 namespace Ubpa {
-	class Serializer_Json : public ISerializer, public VarPtrVisitor<Serializer_Json> {
+	class SerializerJSON : public ISerializer, public VarPtrVisitor<SerializerJSON> {
 	public:
-		Serializer_Json();
+		SerializerJSON();
 
-		using VarPtrVisitor<Serializer_Json>::Regist;
+		using VarPtrVisitor<SerializerJSON>::Regist;
 		using ReflTraitsVisitor::Visit;
 
 		virtual std::string Serialize(const Scene* scene) override;
@@ -102,4 +102,4 @@ namespace Ubpa {
 	};
 }
 
-#include "detail/Serializer_Json.inl"
+#include "detail/SerializerJSON.inl"

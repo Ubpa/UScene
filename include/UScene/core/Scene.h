@@ -9,7 +9,7 @@
 namespace Ubpa {
 	class Scene : public World {
 	public:
-		Read<Scene, SObj*> root;
+		Read<Scene, SObj*> root{ nullptr };
 
 		Scene(const std::string& name = "");
 		virtual ~Scene();

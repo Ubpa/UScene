@@ -9,7 +9,8 @@ SObj::SObj(Entity* entity, const string& name)
 	: entity(entity), name(name) {}
 
 SObj::~SObj() {
-	entity->Release();
+	if(entity && entity->IsAlive())
+		entity->Release();
 	for (const auto& child : children.get())
 		delete child;
 }

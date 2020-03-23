@@ -16,8 +16,6 @@ namespace Ubpa::Cmpt {
 
 		Dirty<transformf> tsfm;
 
-		Transform();
-
 		void SetPosition(const pointf3& pos);
 		void SetScale(const scalef3& scale);
 		void SetRotation(const quatf& rot);
@@ -28,5 +26,8 @@ namespace Ubpa::Cmpt {
 
 		const transformf GetLocalToWorldMatrix() const;
 		const pointf3 GetWorldPos() const { return GetLocalToWorldMatrix().decompose_position(); }
+
+		Transform();
+		Transform(Transform&& tsfm) = default;
 	};
 }

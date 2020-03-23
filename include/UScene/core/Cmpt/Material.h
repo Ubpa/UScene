@@ -15,5 +15,13 @@ namespace Ubpa::Cmpt {
 			delete this->material;
 			this->material = material;
 		}
+
+		Material() = default;
+		virtual ~Material() { delete material; }
+
+		Material(Material && material) noexcept : Component(material)  {
+			this->material = material.material;
+			material.material = nullptr;
+		}
 	};
 }

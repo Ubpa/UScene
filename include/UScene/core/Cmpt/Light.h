@@ -15,5 +15,13 @@ namespace Ubpa::Cmpt {
 			delete this->light;
 			this->light = light;
 		}
+
+		Light() = default;
+		virtual ~Light() { delete light; }
+
+		Light(Light&& light) noexcept : Component(light) {
+			this->light = light.light;
+			light.light = nullptr;
+		}
 	};
 }
