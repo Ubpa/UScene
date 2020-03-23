@@ -10,3 +10,6 @@ Ubpa_AddTarget(MODE "LIB"
 	INTERFACE_INC ON
 	LIBS "Ubpa::${core}"
 )
+
+Ubpa_GetTargetName(cur ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${cur} PUBLIC ${RapidJSON_INCLUDE_DIRS})

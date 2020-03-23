@@ -50,10 +50,19 @@ else()
 	message(STATUS "UCMake v0.3.0 build done")
 endif()
 
+# find RapidJSON
+message(STATUS "find package: RapidJSON")
+find_package(RapidJSON)
+if(${RapidJSON_FOUND})
+	message(STATUS "RapidJSON found")
+else()
+	message(STATUS "RapidJSON not found")
+endif()
+
 # 修改默认的安装路径前缀
 Ubpa_InitInstallPrefix()
 
-Ubpa_AddDep(UDP 0.2.4)
+Ubpa_AddDep(UDP 0.2.6)
 Ubpa_AddDep(UECS 0.3.2)
 Ubpa_AddDep(UGM 0.3.0)
 Ubpa_AddDep(UTemplate 0.2.0)
