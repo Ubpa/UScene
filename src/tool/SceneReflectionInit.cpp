@@ -20,7 +20,7 @@ void Ubpa::SceneReflectionInit() {
 	Reflection<Scene>::Instance()
 		.SetName("Ubpa::Scene")
 		.Regist(&Scene::root, "root")
-		.RegistDefaultConstructor();
+		.RegistConstructor();
 
 	// =================== Component ===================
 
@@ -31,7 +31,7 @@ void Ubpa::SceneReflectionInit() {
 		.SetName("Ubpa::Cmpt::Camera")
 		.Regist(&Cmpt::Camera::ar, "ar")
 		.Regist(&Cmpt::Camera::fov, "fov")
-		.RegistCustomConstructor([](SObj* sobj) {
+		.RegistConstructor([](SObj* sobj) {
 		auto [cmpt] = sobj->Attach<Cmpt::Camera>();
 		return cmpt;
 			});
@@ -39,7 +39,7 @@ void Ubpa::SceneReflectionInit() {
 	Reflection<Cmpt::Geometry>::Instance()
 		.SetName("Ubpa::Cmpt::Geometry")
 		.Regist(&Cmpt::Geometry::primitive, "primitive")
-		.RegistCustomConstructor([](SObj* sobj) {
+		.RegistConstructor([](SObj* sobj) {
 		auto [cmpt] = sobj->Attach<Cmpt::Geometry>();
 		return cmpt;
 			});
@@ -47,7 +47,7 @@ void Ubpa::SceneReflectionInit() {
 	Reflection<Cmpt::Light>::Instance()
 		.SetName("Ubpa::Cmpt::Light")
 		.Regist(&Cmpt::Light::light, "light")
-		.RegistCustomConstructor([](SObj* sobj) {
+		.RegistConstructor([](SObj* sobj) {
 		auto [cmpt] = sobj->Attach<Cmpt::Light>();
 		return cmpt;
 			});
@@ -55,7 +55,7 @@ void Ubpa::SceneReflectionInit() {
 	Reflection<Cmpt::Material>::Instance()
 		.SetName("Ubpa::Cmpt::Material")
 		.Regist(&Cmpt::Material::material, "material")
-		.RegistCustomConstructor([](SObj* sobj) {
+		.RegistConstructor([](SObj* sobj) {
 		auto [cmpt] = sobj->Attach<Cmpt::Material>();
 		return cmpt;
 			});
@@ -65,7 +65,7 @@ void Ubpa::SceneReflectionInit() {
 		.Regist(&Cmpt::Transform::pos, "pos")
 		.Regist(&Cmpt::Transform::scale, "scale")
 		.Regist(&Cmpt::Transform::rot, "rot")
-		.RegistCustomConstructor([](SObj* sobj) {
+		.RegistConstructor([](SObj* sobj) {
 		auto [cmpt] = sobj->Attach<Cmpt::Transform>();
 		return cmpt;
 			});
@@ -74,23 +74,23 @@ void Ubpa::SceneReflectionInit() {
 
 	Reflection<Light>::Instance()
 		.SetName("Ubpa::Light")
-		.RegistDefaultConstructor();
+		.RegistConstructor();
 
 	Reflection<PointLight>::Instance()
 		.SetName("Ubpa::PointLight")
 		.Regist(&PointLight::intensity, "intensity")
 		.Regist(&PointLight::color, "color")
-		.RegistDefaultConstructor();
+		.RegistConstructor();
 
 	// =================== Primitive ===================
 
 	Reflection<Primitive>::Instance()
 		.SetName("Ubpa::Primitive")
-		.RegistDefaultConstructor();
+		.RegistConstructor();
 
 	Reflection<Sphere>::Instance()
 		.SetName("Ubpa::Sphere")
-		.RegistDefaultConstructor();
+		.RegistConstructor();
 
 	// =================== Material ===================
 
@@ -100,5 +100,5 @@ void Ubpa::SceneReflectionInit() {
 	Reflection<Diffuse>::Instance()
 		.SetName("Ubpa::Diffuse")
 		.Regist(&Diffuse::albedo, "albedo")
-		.RegistDefaultConstructor();
+		.RegistConstructor();
 }

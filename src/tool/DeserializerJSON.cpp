@@ -64,7 +64,6 @@ SObj* DeserializerJSON::DeserializeSObj(const std::string& json) {
 	return nullptr;
 }
 
-
 Scene* DeserializerJSON::ParseScene(const rapidjson::Document& doc) {
 	if (!doc.IsObject() || !doc.HasMember("type") || doc["type"] != Reflection<Scene>::Instance().GetName().c_str()) {
 		cerr << "ERROR::DeserializerJSON::DeserializeScene:" << endl
@@ -86,7 +85,7 @@ void DeserializerJSON::ParseSObj(Scene* scene, SObj* sobj, const rapidjson::Valu
 
 	sobj->name = value["name"].GetString();
 	for (const auto& cmptObj : value["Components"].GetArray()) {
-		auto cmpt = ReflectionMngr::Instance().CreatCustom(cmptObj["type"].GetString(), sobj);
+		auto cmpt = ReflectionMngr::Instance().Create(cmptObj["type"].GetString(), sobj);
 		ParseObj(cmpt, cmptObj);
 	}
 
@@ -104,7 +103,7 @@ void* DeserializerJSON::ParseObj(const rapidjson::Value& value) {
 	}
 
 	const Value& name = value["type"];
-	void* obj = ReflectionMngr::Instance().Creat(name.GetString());
+	void* obj = ReflectionMngr::Instance().Create(name.GetString());
 	if (!obj) {
 		cerr << "ERROR::DeserializerJSON::ParseObj:" << endl
 			<< "\t" << "create" << name.GetString() << "fail" << endl;
