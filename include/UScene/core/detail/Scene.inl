@@ -11,6 +11,7 @@ namespace Ubpa {
 		auto rst = World::CreateEntity<Cmpts ...>();
 		auto entity = std::get<Entity*>(rst);
 		auto sobj = new SObj(entity, name);
+		((std::get<Cmpts*>(rst)->sobj = sobj), ...);
 
 		(parent ? parent : root.get())->AddChild(sobj);
 

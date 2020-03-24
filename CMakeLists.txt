@@ -63,7 +63,7 @@ endif()
 Ubpa_InitInstallPrefix()
 
 Ubpa_AddDep(UDP 0.2.7)
-Ubpa_AddDep(UECS 0.3.2)
+Ubpa_AddDep(UECS 0.3.3)
 Ubpa_AddDep(UGM 0.3.0)
 Ubpa_AddDep(UTemplate 0.2.0)
 

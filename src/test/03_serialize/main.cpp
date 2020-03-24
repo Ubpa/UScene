@@ -17,9 +17,9 @@ int main() {
 	auto [sobj1, tsfm1, geo, mat] = scene.CreateSObj<Cmpt::Transform, Cmpt::Geometry, Cmpt::Material>("sobj1");
 	auto [sobj2, tsfm2, light] = scene.CreateSObj<Cmpt::Transform, Cmpt::Light>("sobj2");
 
-	geo->SetPrimitive(new Sphere);
-	mat->SetMaterial(new Diffuse{ 1.f });
-	light->SetLight(new PointLight{ 1.f, 1.f });
+	sobj1->Get<Cmpt::Geometry>()->SetPrimitive(new Sphere);
+	sobj1->Get<Cmpt::Material>()->SetMaterial(new Diffuse{ 1.f });
+	sobj2->Get<Cmpt::Light>()->SetLight(new PointLight{ 1.f, 1.f });
 
 	ISerializer* serializer = new SerializerJSON;
 
