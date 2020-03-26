@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 # 设定项目
-project(UScene VERSION 0.1.0)
+project(UScene VERSION 0.1.1)
 message(STATUS "[Project] ${PROJECT_NAME}")
 
 # 在 Debug 模式下自动对 dll 和 lib 文件名后边加 d，但 exe 仍然需要手动设置
@@ -59,12 +59,22 @@ else()
 	message(STATUS "RapidJSON not found")
 endif()
 
+# stb_image
+message(STATUS "----------")
+if(EXISTS "${PROJECT_SOURCE_DIR}/include/_deps/stb_image.h"
+   AND EXISTS "${PROJECT_SOURCE_DIR}/include/_deps/stb_image_write.h")
+	message(STATUS "found stb_image.h and stb_image_write.h")
+else()
+	message(FATAL_ERROR "not found stb_image.h or stb_image_write.h in include/_deps/\n"
+		"read setup.md for more detail")
+endif()
+
 # 修改默认的安装路径前缀
 Ubpa_InitInstallPrefix()
 
 Ubpa_AddDep(UDP 0.2.7)
 Ubpa_AddDep(UECS 0.3.3)
-Ubpa_AddDep(UGM 0.3.0)
+Ubpa_AddDep(UGM 0.3.3)
 Ubpa_AddDep(UTemplate 0.2.0)
 
 Ubpa_AddSubDirsRec(src)

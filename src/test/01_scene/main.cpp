@@ -8,7 +8,7 @@
 
 #include <UScene/core/Primitive/Sphere.h>
 #include <UScene/core/Light/PointLight.h>
-#include <UScene/core/Material/Diffuse.h>
+#include <UScene/core/Material/stdBRDF.h>
 
 #include <iostream>
 
@@ -23,7 +23,7 @@ int main() {
 	auto [sobj2, tsfm2, light] = scene.CreateSObj<Cmpt::Transform, Cmpt::Light>("sobj2");
 
 	geo->SetPrimitive(new Sphere);
-	mat->SetMaterial(new Diffuse{ 1.f });
+	mat->SetMaterial(new stdBRDF);
 	light->SetLight(new PointLight{ 1.f, 1.f });
 
 	return 0;

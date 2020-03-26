@@ -35,6 +35,8 @@ SerializerJSON::SerializerJSON() {
 
 		Primitive*, Light*, Material*,
 
+		Image*,
+
 		std::string,
 		std::set<SObj*>>();
 

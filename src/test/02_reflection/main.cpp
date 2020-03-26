@@ -26,7 +26,8 @@ public:
 			scalef3,
 			Primitive*,
 			Light*,
-			Material*>();
+			Material*,
+			Image*>();
 	}
 
 	using VarPtrVisitor<VarSerializer>::Regist;
@@ -58,7 +59,9 @@ protected:
 	void ImplVisit(const T& p) { cout << p; }
 	template<typename T>
 	void ImplVisit(T* const& p) {
-		if (IsRegisted<T>())
+		if (p == nullptr)
+			cout << "null";
+		else if (IsRegisted<T>())
 			Visit(p);
 		else
 			cout << p;
@@ -187,7 +190,7 @@ int main() {
 	auto [sobj2, tsfm2, light] = scene.CreateSObj<Cmpt::Transform, Cmpt::Light>("sobj2");
 
 	geo->SetPrimitive(new Sphere);
-	mat->SetMaterial(new Diffuse{ 1.f });
+	mat->SetMaterial(new stdBRDF{ 1.f });
 	light->SetLight(new PointLight{ 1.f, 1.f });
 
 	VarSerializer vs;

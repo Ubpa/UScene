@@ -18,8 +18,12 @@ int main() {
 	auto [sobj2, tsfm2, light] = scene.CreateSObj<Cmpt::Transform, Cmpt::Light>("sobj2");
 
 	sobj1->Get<Cmpt::Geometry>()->SetPrimitive(new Sphere);
-	sobj1->Get<Cmpt::Material>()->SetMaterial(new Diffuse{ 1.f });
+	auto brdf = new stdBRDF;
+	sobj1->Get<Cmpt::Material>()->SetMaterial(brdf);
 	sobj2->Get<Cmpt::Light>()->SetLight(new PointLight{ 1.f, 1.f });
+
+	string path = "../data/tex_square.png";
+	brdf->albedo_texture = ResourceMngr<Image>::Instance().GetOrCreate(path, path);
 
 	ISerializer* serializer = new SerializerJSON;
 

@@ -7,7 +7,6 @@ using namespace Ubpa;
 Cmpt::Transform::Transform()
 	: tsfm{[this](transformf& tsfm) { tsfm = transformf(pos, scale, rot); }} { }
 
-
 void Cmpt::Transform::SetPosition(const pointf3& pos) {
 	this->pos = pos;
 	tsfm.SetDirty();
