@@ -21,3 +21,5 @@
 #include "Primitive/Primitive.h"
 #include "Primitive/Sphere.h"
 #include "Primitive/TriMesh.h"
+#include "Primitive/Triangle.h"
+#include "Primitive/Plane.h"

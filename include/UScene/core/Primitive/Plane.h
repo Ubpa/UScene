@@ -4,6 +4,7 @@
 
 namespace Ubpa {
 	// center : (0, 0, 0)
-	// radius : 1
-	class Sphere : public Primitive {};
+	// side length : 2
+	// normal: (0, 1, 0)
+	class Plane : public Primitive {};
 }

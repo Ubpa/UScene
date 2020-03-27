@@ -92,6 +92,16 @@ void Ubpa::SceneReflectionInit() {
 		.SetName("Ubpa::Sphere")
 		.RegistConstructor();
 
+	Reflection<Plane>::Instance()
+		.SetName("Ubpa::Plane")
+		.RegistConstructor();
+
+	Reflection<Triangle>::Instance()
+		.SetName("Ubpa::Triangle")
+		.Regist(&Triangle::mesh, "mesh")
+		.Regist(&Triangle::indices, "indices")
+		.RegistConstructor();
+
 	Reflection<TriMesh>::Instance()
 		.SetName("Ubpa::TriMesh")
 		.Regist(&TriMesh::indices, "indices")

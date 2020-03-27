@@ -1,7 +1,8 @@
 #pragma once
 
 namespace Ubpa {
-	struct Primitive {
+	class Primitive {
+	public:
 		virtual ~Primitive() = default;
 	};
 }
