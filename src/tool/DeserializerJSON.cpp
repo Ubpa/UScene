@@ -42,7 +42,9 @@ DeserializerJSON::DeserializerJSON() {
 
 		Image*, string,
 
-		SObj*>();
+		SObj*,
+
+		vector<pointf3>, vector<pointf2>, vector<normalf>, vector<vecf3>, vector<valu3>>();
 
 	RegistParseObj([](const rapidjson::Value* cur) {
 		string path = cur->FindMember("path")->value.GetString();
@@ -229,5 +231,11 @@ void DeserializerJSON::Set(uint64_t& property, const rapidjson::Value& value) {
 
 template<typename T>
 void DeserializerJSON::Set(T& property, const rapidjson::Value& value) {
+	DeserializeArray(property, value);
+}
+
+template<typename T>
+void DeserializerJSON::Set(std::vector<T>& property, const rapidjson::Value& value) {
+	property.resize(value.GetArray().Size());
 	DeserializeArray(property, value);
 }

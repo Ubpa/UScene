@@ -92,6 +92,15 @@ void Ubpa::SceneReflectionInit() {
 		.SetName("Ubpa::Sphere")
 		.RegistConstructor();
 
+	Reflection<TriMesh>::Instance()
+		.SetName("Ubpa::TriMesh")
+		.Regist(&TriMesh::indices, "indices")
+		.Regist(&TriMesh::positions, "positions")
+		.Regist(&TriMesh::texcoords, "texcoords")
+		.Regist(&TriMesh::normals, "normals")
+		.Regist(&TriMesh::tangents, "tangents")
+		.RegistConstructor();
+
 	// =================== Material ===================
 
 	Reflection<Material>::Instance()

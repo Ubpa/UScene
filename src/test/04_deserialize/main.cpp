@@ -15,13 +15,14 @@ int main() {
 	Scene scene("scene");
 
 	auto [sobj0, tsfm0, camera] = scene.CreateSObj<Cmpt::Transform, Cmpt::Camera>("sobj0");
-	auto [sobj1, tsfm1, geo, mat] = scene.CreateSObj<Cmpt::Transform, Cmpt::Geometry, Cmpt::Material>("sobj1");
-	auto [sobj2, tsfm2, light] = scene.CreateSObj<Cmpt::Transform, Cmpt::Light>("sobj2");
+	auto [sobj1, tsfm1, geo0, mat] = scene.CreateSObj<Cmpt::Transform, Cmpt::Geometry, Cmpt::Material>("sobj1");
+	auto [sobj2, tsfm2, geo1, light] = scene.CreateSObj<Cmpt::Transform, Cmpt::Geometry, Cmpt::Light>("sobj2");
 
-	sobj1->Get<Cmpt::Geometry>()->SetPrimitive(new Sphere);
+	geo0->SetPrimitive(new Sphere);
 	auto brdf = new stdBRDF;
-	sobj1->Get<Cmpt::Material>()->SetMaterial(brdf);
-	sobj2->Get<Cmpt::Light>()->SetLight(new PointLight{ 1.f, 1.f });
+	mat->SetMaterial(brdf);
+	light->SetLight(new PointLight{ 1.f, 1.f });
+	geo1->SetPrimitive(new TriMesh(TriMesh::Type::Cube));
 
 	string path = "../data/tex_square.png";
 	brdf->albedo_texture = ResourceMngr<Image>::Instance().GetOrCreate(path, path);
