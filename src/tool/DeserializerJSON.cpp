@@ -5,6 +5,8 @@
 #include <UDP/Reflection/ReflectionMngr.h>
 #include <UDP/Reflection/Reflection.h>
 
+#include <UScene/tool/ResourceMngr.h>
+
 #include <rapidjson/error/en.h>
 
 #include <iostream>

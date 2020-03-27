@@ -3,7 +3,6 @@
 #include "SObj.h"
 #include "Scene.h"
 #include "Component.h"
-#include "ResourceMngr.h"
 
 #include "Cmpt/Camera.h"
 #include "Cmpt/Geometry.h"

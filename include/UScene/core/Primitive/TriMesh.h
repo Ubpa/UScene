@@ -24,7 +24,6 @@ namespace Ubpa {
 			const std::vector<normalf>& normals = std::vector<normalf>(),
 			const std::vector<vecf3>& tangents = std::vector<vecf3>());
 
-			
 		enum class Type { Cube, Sphere, Plane };
 		TriMesh(Type type);
 
