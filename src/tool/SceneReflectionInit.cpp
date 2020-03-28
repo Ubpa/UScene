@@ -92,8 +92,8 @@ void Ubpa::SceneReflectionInit() {
 		.SetName("Ubpa::Sphere")
 		.RegistConstructor();
 
-	Reflection<Plane>::Instance()
-		.SetName("Ubpa::Plane")
+	Reflection<Square>::Instance()
+		.SetName("Ubpa::Square")
 		.RegistConstructor();
 
 	Reflection<Triangle>::Instance()

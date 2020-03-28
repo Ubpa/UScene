@@ -22,4 +22,4 @@
 #include "Primitive/Sphere.h"
 #include "Primitive/TriMesh.h"
 #include "Primitive/Triangle.h"
-#include "Primitive/Plane.h"
+#include "Primitive/Square.h"

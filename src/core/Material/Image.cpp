@@ -79,6 +79,9 @@ bool Image::Init(const std::string& path) {
 
 void Image::Init(size_t width, size_t height, size_t channel) {
 	Clear();
+	this->width = width;
+	this->height = height;
+	this->channel = channel;
 	data = new float[width * height * channel];
 }
 

@@ -5,7 +5,7 @@
 #include <UScene/core/Primitive/Sphere.h>
 #include <UScene/core/Primitive/TriMesh.h>
 #include <UScene/core/Primitive/Triangle.h>
-#include <UScene/core/Primitive/Plane.h>
+#include <UScene/core/Primitive/Square.h>
 
 #include <UScene/core/Cmpt/Geometry.h>
 #include <UScene/core/Cmpt/Transform.h>
@@ -23,12 +23,12 @@ using namespace Ubpa;
 class BVH::BVHInitializer : public RawPtrVisitor<BVH::BVHInitializer, Primitive> {
 public:
 	BVHInitializer(BVH* holder) : holder(holder) {
-		Regist<Sphere, TriMesh, Plane>();
+		Regist<Sphere, TriMesh, Square>();
 	}
 	virtual ~BVHInitializer() = default;
 
 public:
-	unordered_map<Primitive*, bboxf3> p2b;
+	unordered_map<const Primitive*, bboxf3> p2b;
 
 public:
 	using RawPtrVisitor<BVH::BVHInitializer, Primitive>::Visit;
@@ -52,20 +52,14 @@ protected:
 		p2b[sphere] = l2w * bboxf3{ {-1,-1,-1}, {1,1,1} };
 	}
 
-	void ImplVisit(Plane* plane) {
-		const auto l2w = holder->GetL2W(plane);
-		holder->primitives.push_back(plane);
-		p2b[plane] = l2w * bboxf3{ {-1,-1,-1 - EPSILON<float>}, {1,1,1 + EPSILON<float>} };
+	void ImplVisit(Square* square) {
+		const auto l2w = holder->GetL2W(square);
+		holder->primitives.push_back(square);
+		p2b[square] = l2w * bboxf3{ {-1,-1,-1 - EPSILON<float>}, {1,1,1 + EPSILON<float>} };
 	}
 
 	void ImplVisit(TriMesh* mesh) {
 		const auto l2w = holder->GetL2W(mesh);
-		holder->primitives.push_back(mesh);
-
-		bboxf3 meshbox;
-		for (const auto& pos : mesh->positions.get())
-			meshbox.combine_to_self(pos);
-		p2b[mesh] = l2w * meshbox;
 
 		for (const auto& tri : mesh->indices.get()) {
 			auto triPrimitive = new Triangle(mesh, tri);
@@ -74,6 +68,8 @@ protected:
 			bboxf3 tribox;
 			for (auto idx : tri)
 				tribox.combine_to_self(mesh->positions->at(idx));
+			tribox.minP() -= vecf3{ EPSILON<float> };
+			tribox.maxP() += vecf3{ EPSILON<float> };
 			p2b[triPrimitive] = l2w * tribox;
 		}
 	}
@@ -92,21 +88,21 @@ BVH::~BVH() {
 		delete primitive;
 }
 
-const transformf& BVH::GetW2L(Primitive* primitive) const {
+const transformf& BVH::GetW2L(const Primitive* primitive) const {
 	const auto target = p2wl.find(primitiveGetter.Visit(primitive));
 	assert(target != p2wl.cend());
 
 	return target->second;
 }
 
-const transformf& BVH::GetL2W(Primitive* primitive) const {
+const transformf& BVH::GetL2W(const Primitive* primitive) const {
 	const auto target = p2lw.find(primitiveGetter.Visit(primitive));
 	assert(target != p2lw.cend());
 
 	return target->second;
 }
 
-const SObj* BVH::GetSObj(Primitive* primitive) const {
+const SObj* BVH::GetSObj(const Primitive* primitive) const {
 	const auto target = p2sobj.find(primitiveGetter.Visit(primitive));
 	assert(target != p2sobj.cend());
 
@@ -141,7 +137,7 @@ void BVH::Init(Scene* scene) {
 	LinearizeBVH(&bvhRoot);
 }
 
-void BVH::LinearizeBVH(BVHNode* bvhNode) {
+void BVH::LinearizeBVH(const BVHNode* bvhNode) {
 	linearBVHNodes.push_back(LinearBVHNode());
 	const auto curNodeIdx = linearBVHNodes.size() - 1;
 

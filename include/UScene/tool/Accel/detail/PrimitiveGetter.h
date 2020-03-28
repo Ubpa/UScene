@@ -9,11 +9,11 @@ namespace Ubpa::detail::Accel_ {
 	class PrimitiveGetter : public RawPtrVisitor<PrimitiveGetter, Primitive> {
 	public:
 		PrimitiveGetter();
-		Primitive* Visit(Primitive* primitive) const;
+		const Primitive* Visit(const Primitive* primitive) const;
 	private:
-		mutable Primitive* rst;
+		mutable const Primitive* rst;
 	protected:
 		template<typename T>
-		void ImplVisit(T* primitive) { rst = primitive; }
+		void ImplVisit(const T* primitive) { rst = primitive; }
 	};
 }

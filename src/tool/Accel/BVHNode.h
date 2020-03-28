@@ -10,8 +10,8 @@ namespace Ubpa {
 
 	class BVHNode {
 	public:
-		BVHNode(const std::unordered_map<Primitive*, bboxf3>& p2b,
-			std::vector<Primitive*>& primitives,
+		BVHNode(const std::unordered_map<const Primitive*, bboxf3>& p2b,
+			std::vector<const Primitive*>& primitives,
 			size_t primitiveOffset, size_t primitiveNum);
 
 		~BVHNode();
@@ -26,7 +26,7 @@ namespace Ubpa {
 
 	private:
 		// 调整 primitives 的顺序，设置 l, r, box 和 axis
-		void Build(const std::unordered_map<Primitive*, bboxf3>& p2b, std::vector<Primitive*>& primitives);
+		void Build(const std::unordered_map<const Primitive*, bboxf3>& p2b, std::vector<const Primitive*>& primitives);
 
 	private:
 		bboxf3 box;
