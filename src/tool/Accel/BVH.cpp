@@ -47,19 +47,19 @@ public:
 
 protected:
 	void ImplVisit(Sphere* sphere) {
-		const auto l2w = holder->GetL2W(sphere);
+		const auto& l2w = holder->GetL2W(sphere);
 		holder->primitives.push_back(sphere);
 		p2b[sphere] = l2w * bboxf3{ {-1,-1,-1}, {1,1,1} };
 	}
 
 	void ImplVisit(Square* square) {
-		const auto l2w = holder->GetL2W(square);
+		const auto& l2w = holder->GetL2W(square);
 		holder->primitives.push_back(square);
 		p2b[square] = l2w * bboxf3{ {-1,-1,-1 - EPSILON<float>}, {1,1,1 + EPSILON<float>} };
 	}
 
 	void ImplVisit(TriMesh* mesh) {
-		const auto l2w = holder->GetL2W(mesh);
+		const auto& l2w = holder->GetL2W(mesh);
 
 		for (const auto& tri : mesh->indices.get()) {
 			auto triPrimitive = new Triangle(mesh, tri);
@@ -138,8 +138,8 @@ void BVH::Init(Scene* scene) {
 }
 
 void BVH::LinearizeBVH(const BVHNode* bvhNode) {
-	linearBVHNodes.push_back(LinearBVHNode());
-	const auto curNodeIdx = linearBVHNodes.size() - 1;
+	linearBVHNodes.emplace_back();
+	const size_t curNodeIdx = linearBVHNodes.size() - 1;
 
 	if (!bvhNode->IsLeaf()) {
 		LinearizeBVH(bvhNode->GetL());

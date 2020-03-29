@@ -82,7 +82,7 @@ void Image::Init(size_t width, size_t height, size_t channel) {
 	this->width = width;
 	this->height = height;
 	this->channel = channel;
-	data = new float[width * height * channel];
+	data = new float[width * height * channel]{ 0.f };
 }
 
 void Image::Init(size_t width, size_t height, size_t channel, const float* data) {

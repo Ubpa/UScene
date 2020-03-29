@@ -1,6 +1,6 @@
 #pragma once
 
-#include <UDP/Visitor/MultiVisitor.h>
+#include <UDP/Visitor/Visitor.h>
 
 #include <UGM/ray.h>
 
@@ -12,14 +12,14 @@ namespace Ubpa {
 	class Triangle;
 	class TriMesh;
 
-	class IntersectorVisibility : public RawPtrMultiVisitor<IntersectorVisibility, Primitive> {
+	class IntersectorVisibility : public RawPtrVisitor<IntersectorVisibility, Primitive> {
 	public:
 		IntersectorVisibility();
 
 		bool Visit(const BVH* bvh, const rayf3& r) const;
 
 	protected:
-		using RawPtrMultiVisitor<IntersectorVisibility, Primitive>::Visit;
+		using RawPtrVisitor<IntersectorVisibility, Primitive>::Visit;
 		void ImplVisit(const Square* primitive);
 		void ImplVisit(const Sphere* primitive);
 		void ImplVisit(const Triangle* primitive);

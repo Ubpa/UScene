@@ -43,7 +43,7 @@ void BVHNode::Build(const unordered_map<const Primitive*, bboxf3>& p2b, vector<c
 
 	// get best partition
 	vector<const Primitive*> bestPartition[2];
-	double minCost = DBL_MAX;
+	double minCost = numeric_limits<double>::max();
 	for (int dim = 0; dim < 3; dim++) {
 
 		// 1. compute buckets

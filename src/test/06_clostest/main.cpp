@@ -1,5 +1,5 @@
 #include <UScene/core/core>
-#include <UScene/tool/Intersector/IntersectorVisibility.h>
+#include <UScene/tool/Intersector/IntersectorClostest.h>
 #include <UScene/tool/Accel/BVH.h>
 
 #include <fstream>
@@ -31,20 +31,25 @@ int main() {
 	camera->Init(to_radian(60.f), width / static_cast<float>(height));
 	
 	BVH bvh(&scene);
-	IntersectorVisibility intersector;
+	IntersectorClostest intersector;
 
-	Image img(width, height, 1);
+	Image img(width, height, 3);
 	for (size_t j = 0; j < height; j++) {
 		float v = j / static_cast<float>(height);
 		for (size_t i = 0; i < width; i++) {
 			float u = i / static_cast<float>(width);
 			rayf3 r = camera->GenRay(u, v);
-			bool visibility = intersector.Visit(&bvh, r);
-			img.At(i, j, 0) = static_cast<float>(visibility);
+			auto rst = intersector.Visit(&bvh, r);
+			if (rst.IsIntersected()) {
+				auto color = ((rst.norm + normalf{ 1.f }) / 2.f).cast_to<rgbf>();
+				img.At(i, j, 0) = color[0];
+				img.At(i, j, 1) = color[1];
+				img.At(i, j, 2) = color[2];
+			}
 		}
 	}
 	
-	img.Save("../data/test_05_visibility_out.png");
+	img.Save("../data/test_06_clostest_out.png");
 
 	return 0;
 }

@@ -31,41 +31,59 @@ TriMesh::TriMesh(Type type) {
 
 // center : (0, 0, 0), side length: 2
 void TriMesh::InitCubeMesh() {
-	vector<pointf3> positions = {
-		pointf3{-1.f, -1.f, -1.f}, pointf3{-1.f,  1.f, -1.f}, pointf3{ 1.f, -1.f, -1.f}, pointf3{ 1.f,  1.f, -1.f},
-		pointf3{-1.f, -1.f,  1.f}, pointf3{ 1.f, -1.f,  1.f}, pointf3{-1.f,  1.f,  1.f}, pointf3{ 1.f,  1.f,  1.f},
-		pointf3{-1.f, -1.f,  1.f}, pointf3{-1.f,  1.f,  1.f}, pointf3{-1.f, -1.f, -1.f}, pointf3{-1.f,  1.f, -1.f},
-		pointf3{ 1.f,  1.f,  1.f}, pointf3{ 1.f, -1.f,  1.f}, pointf3{ 1.f,  1.f, -1.f}, pointf3{ 1.f, -1.f, -1.f},
-		pointf3{ 1.f, -1.f,  1.f}, pointf3{-1.f, -1.f,  1.f}, pointf3{ 1.f, -1.f, -1.f}, pointf3{-1.f, -1.f, -1.f},
-		pointf3{-1.f,  1.f,  1.f}, pointf3{ 1.f,  1.f,  1.f}, pointf3{-1.f,  1.f, -1.f}, pointf3{ 1.f,  1.f, -1.f},
-	};
+	const float data[264] = {
+		// positions      // uv      // normals       // tangent
+		-1.f, -1.f, -1.f, 1.f, 0.f,  0.f,  0.f, -1.f, -1.f,  0.f,  0.f,
+		-1.f,  1.f, -1.f, 1.f, 1.f,  0.f,  0.f, -1.f, -1.f,  0.f,  0.f,
+		 1.f, -1.f, -1.f, 0.f, 0.f,  0.f,  0.f, -1.f, -1.f,  0.f,  0.f,
+		 1.f,  1.f, -1.f, 0.f, 1.f,  0.f,  0.f, -1.f, -1.f,  0.f,  0.f,
 
-	vector<normalf> normals = {
-		normalf{-1.0f, 1.0f, 0.0f}, normalf{-1.0f, 1.0f, 1.0f}, normalf{-1.0f, 0.0f, 0.0f}, normalf{-1.0f, 0.0f, 1.0f},
-		normalf{ 1.0f, 0.0f, 0.0f}, normalf{ 1.0f, 1.0f, 0.0f}, normalf{ 1.0f, 0.0f, 1.0f}, normalf{ 1.0f, 1.0f, 1.0f},
-		normalf{ 0.0f, 1.0f, 0.0f}, normalf{ 0.0f, 1.0f, 1.0f}, normalf{ 0.0f, 0.0f, 0.0f}, normalf{ 0.0f, 0.0f, 1.0f},
-		normalf{ 0.0f, 0.0f, 1.0f}, normalf{ 0.0f, 0.0f, 0.0f}, normalf{ 0.0f, 1.0f, 1.0f}, normalf{ 0.0f, 1.0f, 0.0f},
-		normalf{ 0.0f, 1.0f, 1.0f}, normalf{ 0.0f, 0.0f, 1.0f}, normalf{ 0.0f, 1.0f, 0.0f}, normalf{ 0.0f, 0.0f, 0.0f},
-		normalf{ 0.0f, 0.0f, 0.0f}, normalf{ 0.0f, 1.0f, 0.0f}, normalf{ 0.0f, 0.0f, 1.0f}, normalf{ 0.0f, 1.0f, 1.0f},
-	};
+		-1.f, -1.f,  1.f, 0.f, 0.f,  0.f,  0.f,  1.f,  1.f,  0.f,  0.f,
+		 1.f, -1.f,  1.f, 1.f, 0.f,  0.f,  0.f,  1.f,  1.f,  0.f,  0.f,
+		-1.f,  1.f,  1.f, 0.f, 1.f,  0.f,  0.f,  1.f,  1.f,  0.f,  0.f,
+		 1.f,  1.f,  1.f, 1.f, 1.f,  0.f,  0.f,  1.f,  1.f,  0.f,  0.f,
 
-	vector<valu3> indices(12);
-	for (size_t i = 0; i < 6; i++) {
+		-1.f, -1.f,  1.f, 1.f, 0.f, -1.f,  0.f,  0.f,  0.f,  0.f,  1.f,
+		-1.f,  1.f,  1.f, 1.f, 1.f, -1.f,  0.f,  0.f,  0.f,  0.f,  1.f,
+		-1.f, -1.f, -1.f, 0.f, 0.f, -1.f,  0.f,  0.f,  0.f,  0.f,  1.f,
+		-1.f,  1.f, -1.f, 0.f, 1.f, -1.f,  0.f,  0.f,  0.f,  0.f,  1.f,
+
+		 1.f,  1.f,  1.f, 0.f, 1.f,  1.f,  0.f,  0.f,  0.f,  0.f, -1.f,
+		 1.f, -1.f,  1.f, 0.f, 0.f,  1.f,  0.f,  0.f,  0.f,  0.f, -1.f,
+		 1.f,  1.f, -1.f, 1.f, 1.f,  1.f,  0.f,  0.f,  0.f,  0.f, -1.f,
+		 1.f, -1.f, -1.f, 1.f, 0.f,  1.f,  0.f,  0.f,  0.f,  0.f, -1.f,
+
+		 1.f, -1.f,  1.f, 1.f, 1.f,  0.f, -1.f,  0.f,  1.f,  0.f,  0.f,
+		-1.f, -1.f,  1.f, 0.f, 1.f,  0.f, -1.f,  0.f,  1.f,  0.f,  0.f,
+		 1.f, -1.f, -1.f, 1.f, 0.f,  0.f, -1.f,  0.f,  1.f,  0.f,  0.f,
+		-1.f, -1.f, -1.f, 0.f, 0.f,  0.f, -1.f,  0.f,  1.f,  0.f,  0.f,
+
+		-1.f,  1.f,  1.f, 0.f, 0.f,  0.f,  1.f,  0.f,  1.f,  0.f,  0.f,
+		 1.f,  1.f,  1.f, 1.f, 0.f,  0.f,  1.f,  0.f,  1.f,  0.f,  0.f,
+		-1.f,  1.f, -1.f, 0.f, 1.f,  0.f,  1.f,  0.f,  1.f,  0.f,  0.f,
+		 1.f,  1.f, -1.f, 1.f, 1.f,  0.f,  1.f,  0.f,  1.f,  0.f,  0.f,
+	};
+	constexpr size_t n = 6;
+	vector<valu3> indices(2 * n);
+	for (size_t i = 0; i < n; i++) {
 		auto offset = valu3{ static_cast<unsigned>(4 * i) };
 		indices[2 * i] = offset + valu3{ 0,1,2 };
 		indices[2 * i + 1] = offset + valu3{ 3,2,1 };
 	}
 
-	vector<pointf2> texcoords = {
-		pointf2{ 0.0f,  0.0f}, pointf2{ 0.0f,  0.0f}, pointf2{ 0.0f,  0.0f}, pointf2{ 0.0f,  0.0f},
-		pointf2{ 0.0f,  0.0f}, pointf2{ 0.0f,  0.0f}, pointf2{ 0.0f,  0.0f}, pointf2{ 0.0f,  0.0f},
-		pointf2{-1.0f,  0.0f}, pointf2{-1.0f,  0.0f}, pointf2{-1.0f,  0.0f}, pointf2{-1.0f,  0.0f},
-		pointf2{ 1.0f,  0.0f}, pointf2{ 1.0f,  0.0f}, pointf2{ 1.0f,  0.0f}, pointf2{ 1.0f,  0.0f},
-		pointf2{ 0.0f, -1.0f}, pointf2{ 0.0f, -1.0f}, pointf2{ 0.0f, -1.0f}, pointf2{ 0.0f, -1.0f},
-		pointf2{ 0.0f,  1.0f}, pointf2{ 0.0f,  1.0f}, pointf2{ 0.0f,  1.0f}, pointf2{ 0.0f,  1.0f},
-	};
+	vector<pointf3> positions(4 * n);
+	vector<pointf2> texcoords(4 * n);
+	vector<normalf> normals(4 * n);
+	vector<vecf3> tangents(4 * n);
+	for (size_t i = 0; i < 4 * n; i++) {
+		size_t offset = 11 * i;
+		positions[i] = pointf3{ data[offset + 0],data[offset + 1],data[offset + 2] };
+		texcoords[i] = pointf2{ data[offset + 3],data[offset + 4] };
+		normals[i] = normalf{ data[offset + 5],data[offset + 6],data[offset + 7] };
+		tangents[i] = vecf3{ data[offset + 8],data[offset + 9],data[offset + 10] };
+	}
 
-	Init(indices, positions, texcoords, normals);
+	Init(indices, positions, texcoords, normals, tangents);
 }
 
 // 50 x 50 grid
@@ -80,7 +98,7 @@ void TriMesh::InitSphereMesh() {
 	vector<valu3> indices(triNum);
 	vector<vecf3> tangents(vertexNum);
 
-	float inc = 1.0f / n;
+	float inc = 1.f / n;
 	for (size_t i = 0; i <= n; i++) {
 		float u = inc * i;
 		for (size_t j = 0; j <= n; j++) {
