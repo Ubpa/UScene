@@ -2,7 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #endif // WIN32
 
-#include <UScene/core/Material/Image.h>
+#include <UScene/core/Resource/Image.h>
 
 
 #define STB_IMAGE_IMPLEMENTATION

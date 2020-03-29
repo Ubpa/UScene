@@ -1,7 +1,7 @@
 #include <UScene/tool/SceneReflectionInit.h>
 #include <UScene/tool/serialize/SerializerJSON.h>
 #include <UScene/tool/serialize/DeserializerJSON.h>
-#include <UScene/tool/ResourceMngr.h>
+#include <UScene/core/Resource/ResourceMngr.h>
 #include <UScene/core/core>
 
 #include <fstream>

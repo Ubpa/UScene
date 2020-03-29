@@ -10,7 +10,6 @@ namespace Ubpa {
 	class Square;
 	class Sphere;
 	class Triangle;
-	class TriMesh;
 
 	class IntersectorVisibility : public RawPtrVisitor<IntersectorVisibility, Primitive> {
 	public:

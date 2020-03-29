@@ -76,6 +76,26 @@ void Ubpa::SceneReflectionInit() {
 		.SetName("Ubpa::Light")
 		.RegistConstructor();
 
+	Reflection<AreaLight>::Instance()
+		.SetName("Ubpa::AreaLight")
+		.Regist(&AreaLight::intensity, "intensity")
+		.Regist(&AreaLight::color, "color")
+		.Regist(&AreaLight::texture, "texture")
+		.RegistConstructor();
+
+	Reflection<DirLight>::Instance()
+		.SetName("Ubpa::DirLight")
+		.Regist(&DirLight::intensity, "intensity")
+		.Regist(&DirLight::color, "color")
+		.RegistConstructor();
+
+	Reflection<EnvLight>::Instance()
+		.SetName("Ubpa::EnvLight")
+		.Regist(&EnvLight::intensity, "intensity")
+		.Regist(&EnvLight::color, "color")
+		.Regist(&EnvLight::texture, "texture")
+		.RegistConstructor();
+
 	Reflection<PointLight>::Instance()
 		.SetName("Ubpa::PointLight")
 		.Regist(&PointLight::intensity, "intensity")
@@ -126,6 +146,8 @@ void Ubpa::SceneReflectionInit() {
 		.Regist(&stdBRDF::metalness_texture, "metalness_texture")
 		.Regist(&stdBRDF::normal_map, "normal_map")
 		.RegistConstructor();
+
+	// =================== Resource ===================
 
 	Reflection<Image>::Instance()
 		.SetName("Ubpa::Image")

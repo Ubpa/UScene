@@ -5,12 +5,12 @@
 #include <UGM/rgb.h>
 
 namespace Ubpa {
-	// PointLight's radiance : intensity * color * delta(A)
-	struct PointLight : Light {
+	// DirLight's radiance : intensity * color * delta(w)
+	struct DirLight : Light {
 		float intensity;
 		rgbf color;
 
-		PointLight(float intensity = 1.f, const rgbf& color = rgbf{ 1.f })
+		DirLight(float intensity = 1.f, const rgbf& color = rgbf{ 1.f })
 			: intensity(intensity), color(color) {}
 	};
 }

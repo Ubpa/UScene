@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SObj.h"
-#include "Scene.h"
 #include "Component.h"
+#include "Scene.h"
+#include "SObj.h"
 
 #include "Cmpt/Camera.h"
 #include "Cmpt/Geometry.h"
@@ -11,15 +11,19 @@
 #include "Cmpt/Transform.h"
 
 #include "Light/Light.h"
+#include "Light/AreaLight.h"
+#include "Light/DirLight.h"
+#include "Light/EnvLight.h"
 #include "Light/PointLight.h"
 
 #include "Material/Material.h"
 #include "Material/stdBRDF.h"
-
-#include "Material/Image.h"
 
 #include "Primitive/Primitive.h"
 #include "Primitive/Sphere.h"
 #include "Primitive/TriMesh.h"
 #include "Primitive/Triangle.h"
 #include "Primitive/Square.h"
+
+#include "Resource/Image.h"
+#include "Resource/ResourceMngr.h"

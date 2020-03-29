@@ -2,7 +2,7 @@
 
 #include "Material.h"
 
-#include "Image.h"
+#include "../Resource/Image.h"
 
 #include <UGM/rgb.h>
 

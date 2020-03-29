@@ -29,7 +29,7 @@ bool IntersectorVisibility::Visit(const BVH* bvh, const rayf3& _r) const {
 	stack<size_t> nodeIdxStack;
 	nodeIdxStack.push(0);
 	while (!nodeIdxStack.empty()) {
-		const auto nodeIdx = nodeIdxStack.top();
+		const size_t nodeIdx = nodeIdxStack.top();
 		nodeIdxStack.pop();
 		const auto& node = bvh->GetNode(nodeIdx);
 		auto [isIntersectBox, t0, t1] = r.intersect(node.GetBox());
@@ -37,7 +37,7 @@ bool IntersectorVisibility::Visit(const BVH* bvh, const rayf3& _r) const {
 			continue;
 
 		if (node.IsLeaf()) {
-			for (auto primitiveIdx : node.PrimitiveIndices()) {
+			for (size_t primitiveIdx : node.PrimitiveIndices()) {
 				auto primitive = bvh->GetPrimitive(primitiveIdx);
 
 				r = bvh->GetW2L(primitive) * r;
@@ -54,14 +54,10 @@ bool IntersectorVisibility::Visit(const BVH* bvh, const rayf3& _r) const {
 		else {
 			size_t firstChildIdx = LinearBVHNode::FirstChildIdx(nodeIdx);
 			size_t secondChildIdx = node.GetSecondChildIdx();
-			if (dirIsNeg[static_cast<size_t>(node.GetAxis())]) {
-				nodeIdxStack.push(firstChildIdx);
-				nodeIdxStack.push(secondChildIdx); // on top
-			}
-			else {
-				nodeIdxStack.push(secondChildIdx);
-				nodeIdxStack.push(firstChildIdx); // on top
-			}
+			if (dirIsNeg[static_cast<size_t>(node.GetAxis())])
+				std::swap(firstChildIdx, secondChildIdx);
+			nodeIdxStack.push(secondChildIdx);
+			nodeIdxStack.push(firstChildIdx); // on top
 		}
 	}
 
@@ -83,7 +79,6 @@ void IntersectorVisibility::ImplVisit(const Triangle* primitive) {
 	auto p0 = mesh->positions->at(primitive->indices[0]);
 	auto p1 = mesh->positions->at(primitive->indices[1]);
 	auto p2 = mesh->positions->at(primitive->indices[2]);
-	trianglef3 tri{ p0,p1,p2 };
-	auto [isIntersect, wuv, t] = r.intersect(tri);
+	auto [isIntersect, wuv, t] = r.intersect(trianglef3{ p0,p1,p2 });
 	this->isIntersect = isIntersect;
 }
