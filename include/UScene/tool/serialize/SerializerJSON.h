@@ -1,41 +1,33 @@
 #include <UScene/tool/serialize/ISerializer.h>
 
+#include "UJsonWriter.h"
+
 #include <UScene/core/core>
 #include <UGM/UGM>
 
 #include <UDP/Reflection/Reflection.h>
 #include <UDP/Reflection/VarPtrVisitor.h>
 
-#include <rapidjson/writer.h>
-#include <rapidjson/stringbuffer.h>
-
 namespace Ubpa {
 	class SerializerJSON : public ISerializer, public VarPtrVisitor<SerializerJSON> {
 	public:
 		SerializerJSON();
 
-		using VarPtrVisitor<SerializerJSON>::Regist;
-		using ReflTraitsVisitor::Visit;
-
 		virtual std::string Serialize(const Scene* scene) override;
 		virtual std::string Serialize(const SObj* sobj) override;
 		
+		// argument must be (Ubpa::UJsonWriter&, const Obj*)
 		template<typename Func>
 		void RegistSerializeOtherMember(Func&& func);
 
-		rapidjson::Writer<rapidjson::StringBuffer>& GetWriter() { return writer; }
+		template<typename Obj>
+		void RegistObjPtrMemVar();
 
 	protected:
+		void SerializeOtherMember(const void* obj);
+		
 		template<typename T>
-		void SerializeObj(const T* p);
-
-		template<typename T>
-		void SerializeOtherMember(const T* p);
-
-		template<typename T>
-		void ImplVisit(T* const & obj) {
-			SerializeObj(obj);
-		}
+		void ImplVisit(T* const& obj);
 
 		template<typename T>
 		void ImplVisit(const std::set<T>& p);
@@ -95,12 +87,14 @@ namespace Ubpa {
 		void ImplVisit(const Ubpa::transform<T>& val);
 
 	private:
-		virtual void Receive(const std::string& name, const std::map<std::string, std::shared_ptr<const VarPtrBase>>& nv) override;
+		virtual void Receive(const void* obj, const std::string& name, const std::map<std::string, std::shared_ptr<const VarPtrBase>>& nv) override;
 
 	private:
-		rapidjson::StringBuffer buffer;
-		rapidjson::Writer<rapidjson::StringBuffer> writer;
-		std::map<size_t, std::function<void(const void*)>> callbacks;
+		UJsonWriter writer;
+		std::map<const void*, std::function<void(const void*)>> callbacks; // key is vtable
+
+		using ReflTraitsVisitor::Visit;
+		using VarPtrVisitor<SerializerJSON>::RegistC;
 	};
 }
 

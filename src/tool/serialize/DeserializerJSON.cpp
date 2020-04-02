@@ -7,13 +7,60 @@
 
 #include <UScene/core/Resource/ResourceMngr.h>
 
+#include <rapidjson/document.h>
 #include <rapidjson/error/en.h>
 
 #include <iostream>
 
+namespace Ubpa::detail::DeserializerJSON_ {
+	template<typename T>
+	void DeserializeArray(T& arr, const rapidjson::Value& value);
+	void Set(bool& property, const rapidjson::Value& value);
+	void Set(float& property, const rapidjson::Value& value);
+	void Set(double& property, const rapidjson::Value& value);
+	void Set(int8_t& property, const rapidjson::Value& value);
+	void Set(int16_t& property, const rapidjson::Value& value);
+	void Set(int32_t& property, const rapidjson::Value& value);
+	void Set(int64_t& property, const rapidjson::Value& value);
+	void Set(uint8_t& property, const rapidjson::Value& value);
+	void Set(uint16_t& property, const rapidjson::Value& value);
+	void Set(uint32_t& property, const rapidjson::Value& value);
+	void Set(uint64_t& property, const rapidjson::Value& value);
+	template<typename T> // array
+	void Set(T& property, const rapidjson::Value& value);
+	template<typename T>
+	void Set(std::vector<T>& property, const rapidjson::Value& value);
+}
+
 using namespace Ubpa;
 using namespace std;
 using namespace rapidjson;
+using namespace Ubpa::detail::DeserializerJSON_;
+
+
+class Ubpa::UJsonValue {
+public:
+	UJsonValue(const rapidjson::Value* data) :data{ data } {}
+	const rapidjson::Value* operator->() const { return data; }
+	const rapidjson::Value& operator*() const { return *data; }
+	const rapidjson::Value* data;
+};
+
+class Ubpa::UJsonDoc {
+public:
+	UJsonDoc(rapidjson::Document* data) :data{ data } {}
+	rapidjson::Document* operator->() const { return data; }
+	rapidjson::Document& operator*() const { return *data; }
+	rapidjson::Document* data;
+};
+
+template<typename Func>
+void DeserializerJSON::RegistParseObj(Func&& func) {
+	using T = std::remove_pointer_t<FuncTraits_Ret<Func>>;
+	type2func[Reflection<T>::Instance().GetName()] = [func = std::forward<Func>(func)](const UJsonValue* cur)->void* {
+		return reinterpret_cast<void*>(func(cur->data));
+	};
+}
 
 DeserializerJSON::DeserializerJSON() {
 	Regist<
@@ -56,6 +103,7 @@ DeserializerJSON::DeserializerJSON() {
 
 Scene* DeserializerJSON::DeserializeScene(const std::string& json) {
 	rapidjson::Document doc;
+	UJsonDoc udoc{ &doc };
 
 	ParseResult rst = doc.Parse(json.c_str());
 
@@ -66,7 +114,7 @@ Scene* DeserializerJSON::DeserializeScene(const std::string& json) {
 		return nullptr;
 	}
 
-	auto scene = ParseScene(doc);
+	auto scene = ParseScene(&udoc);
 
 	return scene;
 }
@@ -75,48 +123,51 @@ SObj* DeserializerJSON::DeserializeSObj(const std::string& json) {
 	return nullptr;
 }
 
-Scene* DeserializerJSON::ParseScene(const rapidjson::Document& doc) {
-	if (!doc.IsObject() || !doc.HasMember("type") || doc["type"] != Reflection<Scene>::Instance().GetName().c_str()) {
+Scene* DeserializerJSON::ParseScene(const UJsonDoc* doc) {
+	if (!(**doc).IsObject() || !(**doc).HasMember("type") || (**doc)["type"] != Reflection<Scene>::Instance().GetName().c_str()) {
 		cerr << "ERROR::DeserializerJSON::DeserializeScene:" << endl
 			<< "\t" << "doc isn't a scene" << endl;
 		return nullptr;
 	}
 
 	auto scene = new Scene;
-	ParseSObj(scene, scene->root, doc["root"]);
+	auto val = UJsonValue(&(**doc)["root"]);
+	ParseSObj(scene, scene->root, &val);
 
 	return scene;
 }
 
-void DeserializerJSON::ParseSObj(Scene* scene, SObj* sobj, const rapidjson::Value& value) {
-	if (!value.IsObject() || !value.HasMember("type") || value["type"] != Reflection<SObj>::Instance().GetName().c_str()) {
+void DeserializerJSON::ParseSObj(Scene* scene, SObj* sobj, const UJsonValue* value) {
+	if (!(**value).IsObject() || !(**value).HasMember("type") || (**value)["type"] != Reflection<SObj>::Instance().GetName().c_str()) {
 		cerr << "ERROR::DeserializerJSON::DeserializeScene:" << endl
 			<< "\t" << "value isn't a SObj" << endl;
 	}
 
-	sobj->name = value["name"].GetString();
-	for (const auto& cmptObj : value["Components"].GetArray()) {
+	sobj->name = (**value)["name"].GetString();
+	for (const auto& cmptObj : (**value)["Components"].GetArray()) {
 		auto cmpt = ReflectionMngr::Instance().Create(cmptObj["type"].GetString(), sobj);
-		ParseObj(cmpt, cmptObj);
+		auto val = UJsonValue(&cmptObj);
+		ParseObj(cmpt, &val);
 	}
 
-	for (const auto& childObj : value["children"].GetArray()) {
+	for (const auto& childObj : (**value)["children"].GetArray()) {
 		auto [child] = scene->CreateSObj(childObj["name"].GetString(), sobj);
-		ParseSObj(scene, child, childObj);
+		auto val = UJsonValue(&childObj);
+		ParseSObj(scene, child, &val);
 	}
 }
 
-void* DeserializerJSON::ParseObj(const rapidjson::Value& value) {
-	if (value.IsNull())
+void* DeserializerJSON::ParseObj(const UJsonValue* value) {
+	if ((**value).IsNull())
 		return nullptr;
 
-	if (!value.HasMember("type")) {
+	if (!(**value).HasMember("type")) {
 		cerr << "ERROR::DeserializerJSON::ParseObj:" << endl
 			<< "\t" << "no type" << endl;
 		return nullptr;
 	}
 
-	const Value& name = value["type"];
+	const Value& name = (**value)["type"];
 	auto target = type2func.find(string{ name.GetString() });
 	if (target != type2func.end())
 		return target->second(cur);
@@ -133,16 +184,16 @@ void* DeserializerJSON::ParseObj(const rapidjson::Value& value) {
 	return obj;
 }
 
-void DeserializerJSON::ParseObj(void* obj, const rapidjson::Value& value) {
+void DeserializerJSON::ParseObj(void* obj, const UJsonValue* value) {
 	auto refl = ReflectionMngr::Instance().GetReflction(obj);
 	if (!refl) {
 		cerr << "ERROR::DeserializerJSON::ParseObj:" << endl
-			<< "\t" << "get " << value["type"].GetString() << "reflection by void* fail" << endl;
+			<< "\t" << "get " << (**value)["type"].GetString() << "reflection by void* fail" << endl;
 		return;
 	}
 
 	auto n2v = refl->VarPtrs(obj);
-	for (const auto& member : value.GetObject()) {
+	for (const auto& member : (**value).GetObject()) {
 		if (!std::strcmp(member.name.GetString(), "type")) // equal
 			continue;
 
@@ -152,92 +203,97 @@ void DeserializerJSON::ParseObj(void* obj, const rapidjson::Value& value) {
 				<< "\t" << "obj hasn't property (" << member.name.GetString() << ")" << endl;
 			continue;
 		}
-
-		cur = &member.value;
+		UJsonValue val(&member.value);
+		cur = &val;
 		Visit(target->second);
 	}
 }
 
 template<typename T>
 void DeserializerJSON::ImplVisit(T*& obj) {
-	obj = reinterpret_cast<T*>(ParseObj(*cur));
+	obj = reinterpret_cast<T*>(ParseObj(cur));
 }
 
 template<typename T>
-void DeserializerJSON::DeserializeArray(T& arr, const rapidjson::Value& value) {
+void DeserializerJSON::ImplVisit(T& property) {
+	Set(property, **cur);
+}
+
+template<typename T>
+void Ubpa::detail::DeserializerJSON_::DeserializeArray(T& arr, const rapidjson::Value& value) {
 	const auto& varr = value.GetArray();
 	assert(arr.size() == value.Size());
 	for (size_t i = 0; i < arr.size(); i++)
 		Set(arr[i], varr[static_cast<SizeType>(i)]);
 }
 
-template<typename T, size_t N> void DeserializerJSON::ImplVisit(val<T, N>& val) { DeserializeArray(val, *cur); }
-template<typename T, size_t N> void DeserializerJSON::ImplVisit(point<T, N>& val) { DeserializeArray(val, *cur); }
-template<typename T, size_t N> void DeserializerJSON::ImplVisit(vec<T, N>& val) { DeserializeArray(val, *cur); }
-template<typename T, size_t N> void DeserializerJSON::ImplVisit(scale<T, N>& val) { DeserializeArray(val, *cur); }
+template<typename T, size_t N> void DeserializerJSON::ImplVisit(val<T, N>& val) { DeserializeArray(val, **cur); }
+template<typename T, size_t N> void DeserializerJSON::ImplVisit(point<T, N>& val) { DeserializeArray(val, **cur); }
+template<typename T, size_t N> void DeserializerJSON::ImplVisit(vec<T, N>& val) { DeserializeArray(val, **cur); }
+template<typename T, size_t N> void DeserializerJSON::ImplVisit(scale<T, N>& val) { DeserializeArray(val, **cur); }
 
-template<typename T> void DeserializerJSON::ImplVisit(rgb<T>& val) { DeserializeArray(val, *cur); }
-template<typename T> void DeserializerJSON::ImplVisit(rgba<T>& val) { DeserializeArray(val, *cur); }
-template<typename T> void DeserializerJSON::ImplVisit(quat<T>& val) { DeserializeArray(val, *cur); }
-template<typename T> void DeserializerJSON::ImplVisit(euler<T>& val) { DeserializeArray(val, *cur); }
-template<typename T> void DeserializerJSON::ImplVisit(normal<T>& val) { DeserializeArray(val, *cur); }
+template<typename T> void DeserializerJSON::ImplVisit(rgb<T>& val) { DeserializeArray(val, **cur); }
+template<typename T> void DeserializerJSON::ImplVisit(rgba<T>& val) { DeserializeArray(val, **cur); }
+template<typename T> void DeserializerJSON::ImplVisit(quat<T>& val) { DeserializeArray(val, **cur); }
+template<typename T> void DeserializerJSON::ImplVisit(euler<T>& val) { DeserializeArray(val, **cur); }
+template<typename T> void DeserializerJSON::ImplVisit(normal<T>& val) { DeserializeArray(val, **cur); }
 
-template<typename T, size_t N> void DeserializerJSON::ImplVisit(mat<T, N>& val) { DeserializeArray(val, *cur); }
-template<typename T> void DeserializerJSON::ImplVisit(Ubpa::transform<T>& val) { DeserializeArray(val, *cur); }
+template<typename T, size_t N> void DeserializerJSON::ImplVisit(mat<T, N>& val) { DeserializeArray(val, **cur); }
+template<typename T> void DeserializerJSON::ImplVisit(Ubpa::transform<T>& val) { DeserializeArray(val, **cur); }
 
-void DeserializerJSON::ImplVisit(string& val) { val = cur->GetString(); }
+void DeserializerJSON::ImplVisit(string& val) { val = (**cur).GetString(); }
 
-void DeserializerJSON::Set(bool& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(bool& property, const rapidjson::Value& value) {
 	property = value.GetBool();
 }
 
-void DeserializerJSON::Set(float& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(float& property, const rapidjson::Value& value) {
 	property = static_cast<float>(value.GetDouble());
 }
 
-void DeserializerJSON::Set(double& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(double& property, const rapidjson::Value& value) {
 	property = value.GetDouble();
 }
 
-void DeserializerJSON::Set(int8_t& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(int8_t& property, const rapidjson::Value& value) {
 	property = value.GetInt();
 }
 
-void DeserializerJSON::Set(int16_t& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(int16_t& property, const rapidjson::Value& value) {
 	property = value.GetInt();
 }
 
-void DeserializerJSON::Set(int32_t& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(int32_t& property, const rapidjson::Value& value) {
 	property = value.GetInt();
 }
 
-void DeserializerJSON::Set(int64_t& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(int64_t& property, const rapidjson::Value& value) {
 	property = value.GetInt64();
 }
 
-void DeserializerJSON::Set(uint8_t& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(uint8_t& property, const rapidjson::Value& value) {
 	property = value.GetUint();
 }
 
-void DeserializerJSON::Set(uint16_t& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(uint16_t& property, const rapidjson::Value& value) {
 	property = value.GetUint();
 }
 
-void DeserializerJSON::Set(uint32_t& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(uint32_t& property, const rapidjson::Value& value) {
 	property = value.GetUint();
 }
 
-void DeserializerJSON::Set(uint64_t& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(uint64_t& property, const rapidjson::Value& value) {
 	property = value.GetUint64();
 }
 
 template<typename T>
-void DeserializerJSON::Set(T& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(T& property, const rapidjson::Value& value) {
 	DeserializeArray(property, value);
 }
 
 template<typename T>
-void DeserializerJSON::Set(std::vector<T>& property, const rapidjson::Value& value) {
+void Ubpa::detail::DeserializerJSON_::Set(std::vector<T>& property, const rapidjson::Value& value) {
 	property.resize(value.GetArray().Size());
 	DeserializeArray(property, value);
 }

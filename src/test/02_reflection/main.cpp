@@ -142,7 +142,7 @@ protected:
 	}
 
 private:
-	virtual void Receive(const string& name, const map<string, shared_ptr<VarPtrBase>>& nv) override {
+	virtual void Receive(const void* obj, const std::string& name, const std::map<std::string, std::shared_ptr<const VarPtrBase>>& nv) override {
 		enter();
 		prefix(); cout << "\"type\": \"" << name << "\"";
 		size_t num = nv.size();

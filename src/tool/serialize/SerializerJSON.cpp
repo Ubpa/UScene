@@ -2,11 +2,12 @@
 
 using namespace std;
 using namespace Ubpa;
-using namespace rapidjson;
 
 SerializerJSON::SerializerJSON() {
+	// regist all class in reflections
 	ReflTraitsIniter::Instance().InitC(*this);
 
+	// regist all member variable type
 	VarPtrVisitor<SerializerJSON>::RegistC<
 		bool,
 		float, double,
@@ -41,64 +42,48 @@ SerializerJSON::SerializerJSON() {
 		set<SObj*>,
 		vector<pointf3>, vector<pointf2>, vector<normalf>, vector<vecf3>, vector<valu3>>();
 
-	RegistSerializeOtherMember([this](const SObj* sobj) {
-		GetWriter().Key("Components");
-		GetWriter().StartArray();
+	RegistSerializeOtherMember([this](UJsonWriter& writer, const SObj* sobj) {
+		writer.Key("Components");
+		writer.StartArray();
 		for (auto [cmpt, size] : sobj->Components())
-			SerializeObj(cmpt);
-		GetWriter().EndArray();
-		});
+			Visit(cmpt);
+		writer.EndArray();
+	});
 }
 
 string SerializerJSON::Serialize(const Scene* scene) {
-	buffer.Clear();
-	writer.Reset(buffer);
+	writer.Clear();
 
-	SerializeObj(scene);
+	//SerializeObj(scene);
+	Visit(scene);
 
-	return buffer.GetString();
+	return writer.Rst();
 }
 
 string SerializerJSON::Serialize(const SObj* sobj) {
-	buffer.Clear();
-	writer.Reset(buffer);
+	writer.Clear();
 
-	SerializeObj(sobj);
+	//SerializeObj(sobj);
+	Visit(sobj);
 
-	return buffer.GetString();
+	return writer.Rst();
 }
 
-void SerializerJSON::Receive(const string& name, const map<string, shared_ptr<const VarPtrBase>>& nv) {
+void SerializerJSON::Receive(const void* obj, const string& name, const map<string, shared_ptr<const VarPtrBase>>& nv) {
+	writer.StartObject();
 	writer.Key("type");
 	writer.String(name.c_str());
 
 	for (auto [n, v] : nv) {
 		writer.Key(n.c_str());
-		VarPtrVisitor<SerializerJSON>::Visit(v);
-	}
-}
-
-template<typename T>
-void SerializerJSON::SerializeObj(const T* obj) {
-	if (!obj) {
-		writer.Null();
-		return;
-	}
-
-	writer.StartObject();
-	if constexpr (std::is_void_v<T>)
-		Visit(obj);
-	else {
-		if (IsRegisted<T>())
-			Visit(obj);
+		VarPtrVisitor<SerializerJSON>::Visit(v); // serialize variable
 	}
 	SerializeOtherMember(obj);
 	writer.EndObject();
 }
 
-template<typename T>
-void SerializerJSON::SerializeOtherMember(const T* p) {
-	auto target = callbacks.find(TypeID<T>);
+void SerializerJSON::SerializeOtherMember(const void* p) {
+	auto target = callbacks.find(vtable(p));
 	if (target != callbacks.end())
 		target->second(reinterpret_cast<const void*>(p));
 }

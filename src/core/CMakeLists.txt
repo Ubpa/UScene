@@ -3,17 +3,12 @@ Ubpa_GlobGroupSrcs(RST sources PATHS
 	"${PROJECT_SOURCE_DIR}/include/UScene/core"
 )
 
-Ubpa_ToPackageName(ugm_package_name UGM ${UGM_VERSION})
-Ubpa_ToPackageName(uecs_package_name UECS ${UECS_VERSION})
-Ubpa_ToPackageName(udp_package_name UDP ${UDP_VERSION})
-Ubpa_ToPackageName(utemplate_package_name UTemplate ${UTemplate_VERSION})
-
-Ubpa_AddTarget(MODE "LIB"
+Ubpa_AddTarget_GDR(MODE "LIB"
 	SOURCES ${sources}
 	INTERFACE_INC ON
-	LIBS
-		"Ubpa::${ugm_package_name}_core"
-		"Ubpa::${uecs_package_name}_core"
-		"Ubpa::${udp_package_name}_core"
-		"Ubpa::${utemplate_package_name}_core"
+	PUBLIC_GLIBS
+		"Ubpa::UGM_core"
+		"Ubpa::UECS_core"
+		"Ubpa::UDP_core"
+		"Ubpa::UTemplate_core"
 )
