@@ -47,6 +47,10 @@ const transformf Cmpt::Transform::LocalToWorldMatrix() const {
 	return tsfm;
 }
 
+const quatf Cmpt::Transform::WorldRot() const {
+	return LocalToWorldMatrix().decompose_quatenion();
+}
+
 const pointf3 Cmpt::Transform::WorldPos() const {
 	return LocalToWorldMatrix().decompose_position();
 }

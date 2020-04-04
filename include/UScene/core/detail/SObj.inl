@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../Component.h"
-#include "detail/SystemMngr.h"
 
 namespace Ubpa {
 	template<typename Cmpt>
@@ -22,7 +21,6 @@ namespace Ubpa {
 		static_assert(((!std::is_same_v<Cmpt::Transform, Cmpts>) &&...),
 			"Cmpt::Transform is already attached");
 		auto cmpts = entity->Attach<Cmpts...>();
-		(SystemMngr::Instance().Regist<Cmpts>(), ...);
 		((std::get<Cmpts*>(cmpts)->sobj = this), ...);
 		return cmpts;
 	}

@@ -73,9 +73,8 @@ endif()
 Ubpa_InitInstallPrefix()
 
 Ubpa_AddDep(UDP 0.3.0)
-Ubpa_AddDep(UECS 0.4.0)
+Ubpa_AddDep(UECS 0.5.0)
 Ubpa_AddDep(UGM 0.4.0)
-Ubpa_AddDep(UTemplate 0.3.0)
 
 Ubpa_AddSubDirsRec(src)
 

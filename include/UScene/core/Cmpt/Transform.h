@@ -28,6 +28,7 @@ namespace Ubpa::Cmpt {
 
 		const transformf LocalToWorldMatrix() const;
 		const pointf3 WorldPos() const;
+		const quatf WorldRot() const;
 		const vecf3 FrontInWorld() const;
 		const vecf3 RightInWorld() const;
 		const vecf3 UpInWorld() const;

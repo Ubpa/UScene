@@ -2,8 +2,6 @@
 
 #include "../Component.h"
 
-#include "SystemMngr.h"
-
 namespace Ubpa {
 	template<typename... Cmpts>
 	std::tuple<SObj*, Cmpt::Transform*, Cmpts *...> Scene::CreateSObj(const std::string& name, SObj* parent) {
@@ -14,11 +12,10 @@ namespace Ubpa {
 		auto rst = World::CreateEntity<Cmpt::Transform, Cmpts ...>();
 		auto entity = std::get<Entity*>(rst);
 		auto sobj = new SObj(this, entity, name);
+		std::get<Cmpt::Transform*>(rst)->sobj = sobj;
 		((std::get<Cmpts*>(rst)->sobj = sobj), ...);
 
 		(parent ? parent : root.get())->AddChild(sobj);
-
-		(SystemMngr::Instance().Regist<Cmpts>(), ...);
 
 		return { sobj, std::get<Cmpt::Transform*>(rst), std::get<Cmpts*>(rst)... };
 	}

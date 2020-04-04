@@ -19,8 +19,6 @@ namespace Ubpa {
 		template<typename... Cmpts>
 		std::tuple<SObj*, Cmpt::Transform*, Cmpts *...> CreateSObj(const std::string& name, SObj* parent = nullptr);
 
-		void Update();
-
 	private:
 		using World::CreateEntity;
 	};
