@@ -19,7 +19,7 @@ void Cmpt::Camera::Init(float fov, float ar) {
 	this->fov = fov;
 	this->ar = ar;
 
-	auto modelMatrix = sobj.get()->GetOrAttach<Cmpt::Transform>()->GetLocalToWorldMatrix();
+	auto modelMatrix = sobj->Get<Cmpt::Transform>()->LocalToWorldMatrix();
 	pos = modelMatrix.decompose_position();
 	auto rotMatrix = modelMatrix.decompose_rotation_matrix();
 	front = (rotMatrix * vecf3{ 0.f,0.f,-1.f }).normalize();

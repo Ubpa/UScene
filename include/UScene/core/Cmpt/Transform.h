@@ -17,15 +17,20 @@ namespace Ubpa::Cmpt {
 		Dirty<transformf> tsfm;
 
 		void SetPosition(const pointf3& pos);
+		void Move(const vecf3& displacement);
 		void SetScale(const scalef3& scale);
+		void Scale(const scalef3& scale);
 		void SetRotation(const quatf& rot);
 
 		void Init(const pointf3& pos = pointf3{ 0.f },
 			const scalef3& scale = scalef3{ 1.f },
 			const quatf& rot = quatf::identity());
 
-		const transformf GetLocalToWorldMatrix() const;
-		const pointf3 GetWorldPos() const { return GetLocalToWorldMatrix().decompose_position(); }
+		const transformf LocalToWorldMatrix() const;
+		const pointf3 WorldPos() const;
+		const vecf3 FrontInWorld() const;
+		const vecf3 RightInWorld() const;
+		const vecf3 UpInWorld() const;
 
 		Transform();
 		Transform(Transform&& tsfm) = default;

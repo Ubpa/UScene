@@ -37,7 +37,7 @@ public:
 		if (!primitive)
 			return;
 
-		auto l2w = geo->sobj->GetOrAttach<Cmpt::Transform>()->GetLocalToWorldMatrix();
+		auto l2w = geo->sobj->Get<Cmpt::Transform>()->LocalToWorldMatrix();
 		holder->p2lw[primitive] = l2w;
 		holder->p2wl[primitive] = l2w.inverse();
 

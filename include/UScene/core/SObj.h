@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Cmpt/Transform.h"
+
 #include <UECS/Entity.h>
 
 #include <UGM/transform.h>
@@ -33,6 +35,7 @@ namespace Ubpa {
 		template<typename... Cmpts>
 		std::tuple<Cmpts *...> Attach();
 
+		// not run in Scene.Each
 		template<typename Cmpt>
 		Cmpt* GetOrAttach();
 
@@ -43,9 +46,10 @@ namespace Ubpa {
 
 	protected:
 		SObj() : entity{ nullptr } {}
-		SObj(Entity* entity, const std::string& name);
+		SObj(Scene* scene, Entity* entity, const std::string& name);
 		virtual ~SObj();
 		Entity* entity;
+		Scene* scene;
 		friend class Scene;
 	};
 }

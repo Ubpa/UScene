@@ -22,6 +22,14 @@ void Cmpt::Transform::SetRotation(const quatf& rot) {
 	tsfm.SetDirty();
 }
 
+void Cmpt::Transform::Move(const vecf3& displacement) {
+	SetPosition(pos.get() + displacement);
+}
+
+void Cmpt::Transform::Scale(const scalef3& scale) {
+	SetScale(this->scale.get() * scale);
+}
+
 void Cmpt::Transform::Init(const pointf3& pos, const scalef3& scale, const quatf& rot) {
 	this->pos = pos;
 	this->scale = scale;
@@ -29,7 +37,7 @@ void Cmpt::Transform::Init(const pointf3& pos, const scalef3& scale, const quatf
 	tsfm.SetDirty();
 }
 
-const transformf Cmpt::Transform::GetLocalToWorldMatrix() const {
+const transformf Cmpt::Transform::LocalToWorldMatrix() const {
 	auto tsfm = transformf::eye();
 	for (auto cur = sobj; cur != nullptr; cur = cur->parent) {
 		auto cmpt = cur->Get<Cmpt::Transform>();
@@ -37,4 +45,20 @@ const transformf Cmpt::Transform::GetLocalToWorldMatrix() const {
 			tsfm = cmpt->tsfm.Get() * tsfm;
 	}
 	return tsfm;
+}
+
+const pointf3 Cmpt::Transform::WorldPos() const {
+	return LocalToWorldMatrix().decompose_position();
+}
+
+const vecf3 Cmpt::Transform::FrontInWorld() const{
+	return (LocalToWorldMatrix() * vecf3 { 0, 0, 1 }).normalize();
+}
+
+const vecf3 Cmpt::Transform::RightInWorld() const {
+	return (LocalToWorldMatrix() * vecf3 { 1, 0, 0 }).normalize();
+}
+
+const vecf3 Cmpt::Transform::UpInWorld() const {
+	return (LocalToWorldMatrix() * vecf3 { 0, 1, 0 }).normalize();
 }

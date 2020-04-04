@@ -8,7 +8,7 @@ using namespace Ubpa;
 
 void Ubpa::SceneReflectionInit() {
 	Scene s("tmp");
-	auto [sobj] = s.CreateSObj<>("tmp");
+	auto [sobj, tsfm] = s.CreateSObj<>("tmp");
 
 	vtable_of<SObj>::regist(sobj);
 
@@ -66,9 +66,8 @@ void Ubpa::SceneReflectionInit() {
 		.Regist(&Cmpt::Transform::scale, "scale")
 		.Regist(&Cmpt::Transform::rot, "rot")
 		.RegistConstructor([](SObj* sobj) {
-		auto [cmpt] = sobj->Attach<Cmpt::Transform>();
-		return cmpt;
-			});
+			return sobj->Get<Cmpt::Transform>();
+		});
 
 	// =================== Light ===================
 
