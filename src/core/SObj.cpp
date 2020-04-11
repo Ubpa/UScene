@@ -44,3 +44,16 @@ bool SObj::IsDescendantOf(SObj* sobj) const {
 
 	return parent->IsDescendantOf(sobj);
 }
+
+const vector<tuple<void*, size_t>> SObj::Components() const {
+	return entity->Components();
+}
+
+bool SObj::IsAlive() const noexcept {
+	return entity->IsAlive();
+}
+
+// Attach, Detach, Release, World::CreateEntity
+void SObj::AddCommand(const std::function<void()>& command) {
+	entity->AddCommand(command);
+}

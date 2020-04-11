@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Component.h"
+#include "Component.h"
 
 #include "../Material/Material.h"
 
@@ -19,8 +19,9 @@ namespace Ubpa::Cmpt {
 		Material() = default;
 		virtual ~Material() { delete material; }
 
-		Material(Material && material) noexcept : Component(material)  {
-			this->material = material.material;
+		Material(Material && material) noexcept
+			: material{ material.material }
+		{
 			material.material = nullptr;
 		}
 	};

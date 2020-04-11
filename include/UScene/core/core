@@ -1,14 +1,19 @@
 #pragma once
 
-#include "Component.h"
 #include "Scene.h"
 #include "SObj.h"
 
+#include "Cmpt/Component.h"
+#include "Cmpt/SObjPtr.h"
+#include "Cmpt/Position.h"
+#include "Cmpt/Rotation.h"
+#include "Cmpt/Scale.h"
+#include "Cmpt/Transform.h"
+#include "Cmpt/L2W.h"
 #include "Cmpt/Camera.h"
 #include "Cmpt/Geometry.h"
 #include "Cmpt/Light.h"
 #include "Cmpt/Material.h"
-#include "Cmpt/Transform.h"
 
 #include "Light/Light.h"
 #include "Light/AreaLight.h"
