@@ -7,8 +7,8 @@
 
 #include <UScene/core/Resource/ResourceMngr.h>
 
-#include <rapidjson/document.h>
-#include <rapidjson/error/en.h>
+#include "../_deps/rapidjson/document.h"
+#include "../_deps/rapidjson/error/en.h"
 
 #include <iostream>
 

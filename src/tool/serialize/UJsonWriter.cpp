@@ -1,7 +1,7 @@
 #include <UScene/tool/serialize/UJsonWriter.h>
 
-#include <rapidjson/writer.h>
-#include <rapidjson/stringbuffer.h>
+#include "../_deps/rapidjson/writer.h"
+#include "../_deps/rapidjson/stringbuffer.h"
 
 using namespace Ubpa;
 using namespace std;

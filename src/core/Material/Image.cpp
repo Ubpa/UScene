@@ -6,10 +6,10 @@
 
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <_deps/stb_image.h>
+#include "../_deps/stb_image.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <_deps/stb_image_write.h>
+#include "../_deps/stb_image_write.h"
 
 #include <UGM/UGM>
 
