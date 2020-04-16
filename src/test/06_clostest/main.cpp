@@ -1,4 +1,4 @@
-#include <UScene/core/core>
+#include <UScene/core.h>
 #include <UScene/tool/Intersector/IntersectorClostest.h>
 #include <UScene/tool/Accel/BVH.h>
 

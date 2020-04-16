@@ -1,7 +1,6 @@
 #include <UScene/tool/SceneReflectionInit.h>
 #include <UScene/tool/serialize/SerializerJSON.h>
-#include <UScene/core/Resource/ResourceMngr.h>
-#include <UScene/core/core>
+#include <UScene/core.h>
 
 #include <fstream>
 #include <iostream>
@@ -25,7 +24,7 @@ int main() {
 	geo1->SetPrimitive(new TriMesh(TriMesh::Type::Cube));
 
 	string path = "../data/tex_square.png";
-	brdf->albedo_texture = ResourceMngr<Image>::Instance().GetOrCreate(path, path);
+	brdf->albedo_texture = new Texture2D{ path };
 
 	ISerializer* serializer = new SerializerJSON;
 

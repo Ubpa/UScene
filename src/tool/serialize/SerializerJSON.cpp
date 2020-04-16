@@ -1,5 +1,12 @@
 #include <UScene/tool/serialize/SerializerJSON.h>
 
+#include <UScene/core/SObj.h>
+#include <UScene/core/Scene.h>
+#include <UScene/core/Primitive/Primitive.h>
+#include <UScene/core/Light/Light.h>
+#include <UScene/core/Material/Material.h>
+#include <UScene/core/Material/Texture2D.h>
+
 using namespace std;
 using namespace Ubpa;
 
@@ -36,7 +43,7 @@ SerializerJSON::SerializerJSON() {
 
 		Primitive*, Light*, Material*,
 
-		Image*,
+		Texture2D*,
 
 		string,
 		set<SObj*>,

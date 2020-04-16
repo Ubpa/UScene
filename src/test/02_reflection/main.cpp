@@ -1,4 +1,4 @@
-#include <UScene/core/core>
+#include <UScene/core.h>
 #include <UScene/tool/SceneReflectionInit.h>
 
 #include <UDP/Visitor/MultiVisitor.h>
@@ -27,7 +27,7 @@ public:
 			Primitive*,
 			Light*,
 			Material*,
-			Image*>();
+			Texture2D*>();
 	}
 
 	using VarPtrVisitor<VarSerializer>::Regist;

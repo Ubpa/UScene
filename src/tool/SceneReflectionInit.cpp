@@ -1,10 +1,11 @@
 #include <UScene/tool/SceneReflectionInit.h>
 
-#include <UScene/core/core>
+#include <UScene/core.h>
 
 #include <UDP/Reflection/Reflection.h>
 
 using namespace Ubpa;
+using namespace std;
 
 void Ubpa::SceneReflectionInit() {
 	Scene s("tmp");
@@ -175,11 +176,15 @@ void Ubpa::SceneReflectionInit() {
 
 	// =================== Resource ===================
 
-	Reflection<Image>::Instance()
-		.SetName("Ubpa::Image")
-		.Regist(&Image::width, "width")
-		.Regist(&Image::height, "height")
-		.Regist(&Image::channel, "channel")
-		.Regist(&Image::path, "path")
-		.RegistConstructor();
+	Reflection<Texture2D>::Instance()
+		.SetName("Ubpa::Texture2D")
+		.Regist(&Texture2D::inv_u, "inv_u")
+		.Regist(&Texture2D::inv_v, "inv_v")
+		.Regist(&Texture2D::swap_uv, "swap_uv")
+		.Regist(&Texture2D::wrap_u, "wrap_u")
+		.Regist(&Texture2D::wrap_v, "wrap_v")
+		.Regist(&Texture2D::path, "path");
+		/*.RegistConstructor([](const string& path) {
+			return new Texture2D{ path };
+		});*/
 }

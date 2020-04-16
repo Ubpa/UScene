@@ -2,13 +2,17 @@
 
 #include "UJsonWriter.h"
 
-#include <UScene/core/core>
 #include <UGM/UGM>
 
 #include <UDP/Reflection/Reflection.h>
 #include <UDP/Reflection/VarPtrVisitor.h>
 
+#include <set>
+
 namespace Ubpa {
+	class Scene;
+	class SObj;
+
 	class SerializerJSON : public ISerializer, public VarPtrVisitor<SerializerJSON> {
 	public:
 		SerializerJSON();

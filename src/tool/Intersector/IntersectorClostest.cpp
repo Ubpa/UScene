@@ -1,7 +1,10 @@
 #include <UScene/tool/Intersector/IntersectorClostest.h>
 
 #include <UScene/tool/Accel/BVH.h>
-#include <UScene/core/core>
+#include <UScene/core/Primitive/Square.h>
+#include <UScene/core/Primitive/Triangle.h>
+#include <UScene/core/Primitive/Sphere.h>
+#include <UScene/core/Primitive/TriMesh.h>
 
 #include <UGM/UGM>
 

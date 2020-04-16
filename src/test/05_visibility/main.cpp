@@ -1,4 +1,4 @@
-#include <UScene/core/core>
+#include <UScene/core.h>
 #include <UScene/tool/Intersector/IntersectorVisibility.h>
 #include <UScene/tool/Accel/BVH.h>
 

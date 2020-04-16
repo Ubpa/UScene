@@ -1,11 +1,14 @@
 #include <UScene/tool/serialize/DeserializerJSON.h>
 
-#include <UScene/core/core>
+#include <UScene/core/SObj.h>
+#include <UScene/core/Scene.h>
+#include <UScene/core/Primitive/Primitive.h>
+#include <UScene/core/Light/Light.h>
+#include <UScene/core/Material/Material.h>
+#include <UScene/core/Material/Texture2D.h>
 
 #include <UDP/Reflection/ReflectionMngr.h>
 #include <UDP/Reflection/Reflection.h>
-
-#include <UScene/core/Resource/ResourceMngr.h>
 
 #include "../_deps/rapidjson/document.h"
 #include "../_deps/rapidjson/error/en.h"
@@ -55,7 +58,7 @@ public:
 };
 
 template<typename Func>
-void DeserializerJSON::RegistParseObj(Func&& func) {
+void DeserializerJSON::RegistGenObj(Func&& func) {
 	using T = std::remove_pointer_t<FuncTraits_Ret<Func>>;
 	type2func[Reflection<T>::Instance().GetName()] = [func = std::forward<Func>(func)](const UJsonValue* cur)->void* {
 		return reinterpret_cast<void*>(func(cur->data));
@@ -89,15 +92,15 @@ DeserializerJSON::DeserializerJSON() {
 
 		Primitive*, Light*, Material*,
 
-		Image*, string,
+		Texture2D*, string,
 
 		SObj*,
 
 		vector<pointf3>, vector<pointf2>, vector<normalf>, vector<vecf3>, vector<valu3>>();
 
-	RegistParseObj([](const rapidjson::Value* cur) {
-		string path = cur->FindMember("path")->value.GetString();
-		return ResourceMngr<Image>::Instance().GetOrCreate(path, path);
+	RegistGenObj([](const rapidjson::Value* obj) {
+		string path = obj->FindMember("path")->value.GetString();
+		return new Texture2D{ path };
 	});
 }
 
@@ -168,11 +171,13 @@ void* DeserializerJSON::ParseObj(const UJsonValue* value) {
 	}
 
 	const Value& name = (**value)["type"];
+	void* obj;
 	auto target = type2func.find(string{ name.GetString() });
 	if (target != type2func.end())
-		return target->second(cur);
+		obj = target->second(cur);
+	else
+		obj = ReflectionMngr::Instance().Create(name.GetString());
 
-	void* obj = ReflectionMngr::Instance().Create(name.GetString());
 	if (!obj) {
 		cerr << "ERROR::DeserializerJSON::ParseObj:" << endl
 			<< "\t" << "create" << name.GetString() << "fail" << endl;
