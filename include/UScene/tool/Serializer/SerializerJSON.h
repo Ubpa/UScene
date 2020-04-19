@@ -1,4 +1,4 @@
-#include <UScene/tool/serialize/ISerializer.h>
+#include <UScene/tool/Serializer/ISerializer.h>
 
 #include "UJsonWriter.h"
 
@@ -91,7 +91,7 @@ namespace Ubpa {
 		void ImplVisit(const Ubpa::transform<T>& val);
 
 	private:
-		virtual void Receive(const void* obj, const std::string& name, const std::map<std::string, std::shared_ptr<const VarPtrBase>>& nv) override;
+		virtual void Receive(const void* obj, std::string_view name, const xMap<std::string, std::shared_ptr<const VarPtrBase>>& nv) override;
 
 	private:
 		UJsonWriter writer;

@@ -15,7 +15,7 @@ void Texture2D::SetPath(const string& path) {
 	img = RsrcMngr<Image>::Instance().GetOrCreate(path);
 }
 
-rgbaf Texture2D::Sample(pointf2 uv) {
+rgbaf Texture2D::Sample(pointf2 uv) const {
 	// transform uv
 	WrapMode wrapmodes[2] = { wrap_u, wrap_v };
 	bool inv[2] = { inv_u, inv_v };
@@ -40,5 +40,13 @@ rgbaf Texture2D::Sample(pointf2 uv) {
 		swap(uv[0], uv[1]);
 
 	// sample
-	return img->Sample(uv);
+	switch (sample_mode)
+	{
+	case Ubpa::Texture2D::SampleMode::Nearest:
+		return img->SampleNearest(uv);
+	case Ubpa::Texture2D::SampleMode::Linear:
+		return img->SampleLinear(uv);
+	default:
+		return { 1.f };
+	}
 }

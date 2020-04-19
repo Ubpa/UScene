@@ -6,6 +6,7 @@
 #include "../Cmpt/Transform.h"
 #include "../Cmpt/L2W.h"
 #include "../Cmpt/SObjPtr.h"
+#include "../Cmpt/Root.h"
 
 namespace Ubpa::detail::SObj_ {
 	template<typename T>
@@ -15,6 +16,10 @@ namespace Ubpa::detail::SObj_ {
 		|| std::is_same_v<Cmpt::SObjPtr, T>
 		|| std::is_same_v<Cmpt::Transform, T>
 		|| std::is_same_v<Cmpt::L2W, T>;
+
+	template<typename T>
+	constexpr bool IsUndetachableCmpt = IsNecessaryCmpt<T>
+		|| std::is_same_v<Cmpt::Root, T>;
 }
 
 namespace Ubpa {
@@ -52,8 +57,8 @@ namespace Ubpa {
 	template<typename... Cmpts>
 	void SObj::Detach() {
 		static_assert((std::is_base_of_v<Component, Cmpts> && ...));
-		static_assert(((!detail::SObj_::IsNecessaryCmpt<Cmpts>) &&...),
-			"<Cmpts> is necessary component");
+		static_assert(((!detail::SObj_::IsUndetachableCmpt<Cmpts>) &&...),
+			"<Cmpts> is undetachable component");
 		entity->Detach<Cmpts...>();
 	}
 

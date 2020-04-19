@@ -33,7 +33,9 @@ int main() {
 
 	// ===========
 
-	scene.Update(true); // update Cmpt::Transform, Cmpt::L2W
+	scene.Start();
+	scene.Update(); // update Cmpt::Transform, Cmpt::L2W
+	cout << scene.DumpUpdateTaskflow() << endl;
 
 	auto l2w = sobj0->Get<Cmpt::L2W>()->value;
 	auto cameraCoordSystem = camera->GenCoordinateSystem(l2w);
@@ -58,6 +60,8 @@ int main() {
 		}
 	}
 	
+	scene.Stop();
+
 	img.Save("../data/test_06_clostest_out.png");
 
 	return 0;

@@ -1,7 +1,5 @@
 #include <UScene/core/SObj.h>
 
-#include <UScene/core/Cmpt/Transform.h>
-
 using namespace Ubpa;
 using namespace std;
 

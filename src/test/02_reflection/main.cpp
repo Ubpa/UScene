@@ -35,7 +35,7 @@ public:
 
 	void Visit(SObj* sobj) {
 		enter();
-		prefix(); cout << "\"type\": \"" << Reflection<SObj>::Instance().GetName() << "\"," << endl;
+		prefix(); cout << "\"type\": \"" << Reflection<SObj>::Instance().Name() << "\"," << endl;
 		for (auto [n, v] : Reflection<SObj>::Instance().VarPtrs(*sobj)) {
 			prefix(); cout << "\"" << n << "\"" << ": ";
 			VarPtrVisitor<VarSerializer>::Visit(v);
@@ -61,37 +61,26 @@ protected:
 	void ImplVisit(T* const& p) {
 		if (p == nullptr)
 			cout << "null";
-		else if (IsRegisted<T>())
-			Visit(p);
 		else
-			cout << p;
+			Visit(p);
 	}
 
 	template<typename T>
 	void ImplVisit(T& p) { cout << p; }
 	template<typename T>
 	void ImplVisit(T*& p) {
-		if (IsRegisted<T>())
-			Visit(p);
-		else
-			cout << p;
+		Visit(p);
 	}
 
 	template<typename T>
 	void ImplVisit(const set<T*>& p) {
 		cout << "[";
-		if (IsRegisted<T>()) {
-			size_t num = p.size();
-			size_t i = 0;
-			for (auto var : p) {
-				Visit(var);
-				if (++i < num)
-					cout << ",";
-			}
-		}
-		else {
-			for (auto var : p)
-				cout << var << ", ";
+		size_t num = p.size();
+		size_t i = 0;
+		for (auto var : p) {
+			Visit(var);
+			if (++i < num)
+				cout << ",";
 		}
 		cout << "]";
 	}
@@ -142,7 +131,7 @@ protected:
 	}
 
 private:
-	virtual void Receive(const void* obj, const std::string& name, const std::map<std::string, std::shared_ptr<const VarPtrBase>>& nv) override {
+	virtual void Receive(const void* obj, std::string_view name, const xMap<std::string, std::shared_ptr<const VarPtrBase>>& nv) override {
 		enter();
 		prefix(); cout << "\"type\": \"" << name << "\"";
 		size_t num = nv.size();
@@ -150,6 +139,8 @@ private:
 			cout << "," << endl;
 			size_t i = 0;
 			for (auto [n, v] : nv) {
+				if (ReflectionMngr::Instance().GetReflction(obj)->Meta(n + "::" + Component::Meta::not_serialize) == Component::Meta::not_serialize_value)
+					continue;
 				prefix(); cout << "\"" << n << "\"" << ": ";
 				VarPtrVisitor<VarSerializer>::Visit(v);
 				if (++i < num)

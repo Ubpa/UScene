@@ -6,7 +6,7 @@ using namespace Ubpa;
 Scene::Scene(const std::string& name)
 	: root{ new SObj(this, get<Entity*>(World::CreateEntity<Cmpt::SObjPtr,
 			Cmpt::Position, Cmpt::Rotation, Cmpt::Scale,
-			Cmpt::Transform, Cmpt::L2W>()), name) }
+			Cmpt::Transform, Cmpt::L2W, Cmpt::Root>()), name) }
 {
 	root->Get<Cmpt::SObjPtr>()->sobj.val = root;
 }

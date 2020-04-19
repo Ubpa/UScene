@@ -10,6 +10,9 @@ namespace Ubpa {
 		float intensity;
 		rgbf color;
 
+
+		rgbf radiance() const noexcept { return intensity * color; }
+
 		DirLight(float intensity = 1.f, const rgbf& color = rgbf{ 1.f })
 			: intensity(intensity), color(color) {}
 	};

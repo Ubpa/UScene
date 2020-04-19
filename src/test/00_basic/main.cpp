@@ -1,5 +1,4 @@
 #include <UScene/core/Scene.h>
-#include <UScene/core/Cmpt/Transform.h>
 
 #include <iostream>
 
@@ -8,7 +7,7 @@ using namespace Ubpa;
 
 class Mover : public Component {
 public:
-	void OnUpdate(Cmpt::Position* p) {
+	void OnUpdate(Cmpt::Position* p) const {
 		p->value += vecf3{ 1,1,1 };
 	}
 };

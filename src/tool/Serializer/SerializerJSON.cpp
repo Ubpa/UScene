@@ -1,4 +1,4 @@
-#include <UScene/tool/serialize/SerializerJSON.h>
+#include <UScene/tool/Serializer/SerializerJSON.h>
 
 #include <UScene/core/SObj.h>
 #include <UScene/core/Scene.h>
@@ -76,12 +76,14 @@ string SerializerJSON::Serialize(const SObj* sobj) {
 	return writer.Rst();
 }
 
-void SerializerJSON::Receive(const void* obj, const string& name, const map<string, shared_ptr<const VarPtrBase>>& nv) {
+void SerializerJSON::Receive(const void* obj, string_view name, const xMap<string, shared_ptr<const VarPtrBase>>& nv) {
 	writer.StartObject();
 	writer.Key("type");
-	writer.String(name.c_str());
+	writer.String(name.data());
 
 	for (auto [n, v] : nv) {
+		if (ReflectionMngr::Instance().GetReflction(obj)->Meta(n + "::" + Component::Meta::not_serialize) == Component::Meta::not_serialize_value)
+			continue;
 		writer.Key(n.c_str());
 		VarPtrVisitor<SerializerJSON>::Visit(v); // serialize variable
 	}

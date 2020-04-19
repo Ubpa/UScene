@@ -33,7 +33,9 @@ int main() {
 
 	// ===========
 
-	scene.Update(true); // update Cmpt::Transform, Cmpt::L2W
+	scene.Start();
+	scene.Update(); // update Cmpt::Transform, Cmpt::L2W
+	cout << scene.DumpUpdateTaskflow() << endl;
 
 	auto l2w = sobj0->Get<Cmpt::L2W>()->value;
 	auto cameraCoordSystem = camera->GenCoordinateSystem(l2w);
@@ -51,6 +53,8 @@ int main() {
 			img.At(i, j, 0) = static_cast<float>(visibility);
 		}
 	}
+
+	scene.Stop();
 	
 	img.Save("../data/test_05_visibility_out.png");
 

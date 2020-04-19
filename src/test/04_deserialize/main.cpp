@@ -1,6 +1,6 @@
 #include <UScene/tool/SceneReflectionInit.h>
-#include <UScene/tool/serialize/SerializerJSON.h>
-#include <UScene/tool/serialize/DeserializerJSON.h>
+#include <UScene/tool/Serializer/SerializerJSON.h>
+#include <UScene/tool/Serializer/DeserializerJSON.h>
 #include <UScene/core.h>
 
 #include <fstream>
@@ -24,6 +24,9 @@ int main() {
 	light->SetLight(new PointLight{ 1.f, 1.f });
 	geo1->SetPrimitive(new TriMesh(TriMesh::Type::Cube));
 
+	scene.Start();
+	scene.Update();
+
 	string path = "../data/tex_square.png";
 	brdf->albedo_texture = new Texture2D{ path };
 
@@ -33,6 +36,8 @@ int main() {
 	auto rst = serializer->Serialize(&scene);
 	auto rstScene = deserializer->DeserializeScene(rst);
 	rst = serializer->Serialize(rstScene);
+
+	scene.Stop();
 
 	ofstream ofs;
 	string filename = "../data/test_04_output.uscene";

@@ -14,12 +14,15 @@ namespace Ubpa::Cmpt {
 	public:
 		Read<L2W, transformf> value;
 
-		void OnUpdate(const Transform* tsfm, const SObjPtr* ptr);
+		const pointf3 WorldPos() const noexcept;
+		const quatf WorldRot() const noexcept;
+		const scalef3 WorldScale() const noexcept;
 
-		const pointf3 WorldPos() const;
-		const quatf WorldRot() const;
-		const vecf3 FrontInWorld() const;
-		const vecf3 RightInWorld() const;
-		const vecf3 UpInWorld() const;
+		// normalized
+		const vecf3 FrontInWorld() const noexcept;
+		// normalized
+		const vecf3 RightInWorld() const noexcept;
+		// normalized
+		const vecf3 UpInWorld() const noexcept;
 	};
 }

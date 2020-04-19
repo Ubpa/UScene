@@ -7,28 +7,26 @@
 
 using namespace Ubpa;
 
-void Cmpt::L2W::OnUpdate(const Transform* tsfm, const SObjPtr* ptr) {
-	value = tsfm->value;
-	for (auto cur = ptr->sobj->parent; cur != nullptr; cur = cur->parent)
-		value = cur->Get<Transform>()->value * value;
-}
-
-const quatf Cmpt::L2W::WorldRot() const {
-	return value->decompose_quatenion();
-}
-
-const pointf3 Cmpt::L2W::WorldPos() const {
+const pointf3 Cmpt::L2W::WorldPos() const noexcept {
 	return value->decompose_position();
 }
 
-const vecf3 Cmpt::L2W::FrontInWorld() const {
+const quatf Cmpt::L2W::WorldRot() const noexcept {
+	return value->decompose_quatenion();
+}
+
+const scalef3 Cmpt::L2W::WorldScale() const noexcept {
+	return value->decompose_scale();
+}
+
+const vecf3 Cmpt::L2W::FrontInWorld() const noexcept {
 	return (value * vecf3 { 0, 0, 1 }).normalize();
 }
 
-const vecf3 Cmpt::L2W::RightInWorld() const {
+const vecf3 Cmpt::L2W::RightInWorld() const noexcept {
 	return (value * vecf3 { 1, 0, 0 }).normalize();
 }
 
-const vecf3 Cmpt::L2W::UpInWorld() const {
+const vecf3 Cmpt::L2W::UpInWorld() const noexcept {
 	return (value * vecf3 { 0, 1, 0 }).normalize();
 }
