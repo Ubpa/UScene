@@ -2,6 +2,8 @@
 
 #include <UScene/core/Material/Texture2D.h>
 
+#include "detail/dynamic_reflection/AreaLight.inl"
+
 using namespace Ubpa;
 
 rgbf AreaLight::radiance(const pointf2& uv) const noexcept {
@@ -9,4 +11,8 @@ rgbf AreaLight::radiance(const pointf2& uv) const noexcept {
 		return radiance_factor();
 
 	return texture->Sample(uv).to_rgb();
+}
+
+void AreaLight::OnRegist() {
+	detail::dynamic_reflection::ReflRegist_AreaLight();
 }

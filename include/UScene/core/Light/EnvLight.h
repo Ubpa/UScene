@@ -17,7 +17,8 @@ namespace Ubpa {
 		rgbf radiance_factor() const noexcept { return intensity * color; }
 		rgbf radiance(const pointf2& uv) const noexcept;
 
-		EnvLight(float intensity = 1.f, const rgbf& color = rgbf{ 1.f }, Texture2D* texture = nullptr)
-			: intensity{ intensity }, color{ color }, texture{ texture }{}
+		EnvLight(float intensity = 1.f, const rgbf& color = rgbf{ 1.f,1.f,1.f }, Texture2D* texture = nullptr);
+
+		static void OnRegist();
 	};
 }

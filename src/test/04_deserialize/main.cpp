@@ -1,4 +1,3 @@
-#include <UScene/tool/SceneReflectionInit.h>
 #include <UScene/tool/Serializer/SerializerJSON.h>
 #include <UScene/tool/Serializer/DeserializerJSON.h>
 #include <UScene/core.h>
@@ -10,7 +9,7 @@ using namespace std;
 using namespace Ubpa;
 
 int main() {
-	SceneReflectionInit();
+	Scene::OnRegist();
 
 	Scene scene("scene");
 

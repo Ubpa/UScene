@@ -11,18 +11,13 @@ namespace Ubpa::Cmpt {
 	public:
 		Read<Light, Ubpa::Light*> light{ nullptr };
 
-		void SetLight(Ubpa::Light* light) {
-			delete this->light;
-			this->light = light;
-		}
+		Light();
+		virtual ~Light();
 
-		Light() = default;
-		virtual ~Light() { delete light; }
+		Light(Light&& light) noexcept;
 
-		Light(Light&& light) noexcept
-			: light{ light.light }
-		{
-			light.light = nullptr;
-		}
+		void SetLight(Ubpa::Light* light);
+
+		static void OnRegist();
 	};
 }

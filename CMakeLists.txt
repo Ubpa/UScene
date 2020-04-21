@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 # 设定项目
-project(UScene VERSION 0.4.6)
+project(UScene VERSION 0.5.0)
 message(STATUS "[Project] ${PROJECT_NAME}")
 
 # 在 Debug 模式下自动对 dll 和 lib 文件名后边加 d，但 exe 仍然需要手动设置
@@ -57,7 +57,7 @@ Ubpa_InitInstallPrefix()
 Ubpa_InitTestSwitch()
 #set(Ubpa_BuildTest ON)
 
-Ubpa_AddDep(UECS 0.5.4)
+Ubpa_AddDep(UECS 0.5.5)
 
 Ubpa_AddSubDirsRec(include)
 Ubpa_AddSubDirsRec(src)

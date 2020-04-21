@@ -1,5 +1,4 @@
 #include <UScene/core.h>
-#include <UScene/tool/SceneReflectionInit.h>
 
 #include <UDP/Visitor/MultiVisitor.h>
 #include <UDP/Reflection/MemVarVisitor.h>
@@ -37,6 +36,8 @@ public:
 		enter();
 		prefix(); cout << "\"type\": \"" << Reflection<SObj>::Instance().Name() << "\"," << endl;
 		for (auto [n, v] : Reflection<SObj>::Instance().VarPtrs(*sobj)) {
+			if (Reflection<SObj>::Instance().FieldMeta(n, ReflAttr::is_not_serialize) == ReflAttr::null)
+				continue;
 			prefix(); cout << "\"" << n << "\"" << ": ";
 			VarPtrVisitor<VarSerializer>::Visit(v);
 			cout << ", " << endl;
@@ -62,14 +63,17 @@ protected:
 		if (p == nullptr)
 			cout << "null";
 		else
-			Visit(p);
+			ReflTraitsVisitor::Visit(p);
 	}
 
 	template<typename T>
 	void ImplVisit(T& p) { cout << p; }
 	template<typename T>
 	void ImplVisit(T*& p) {
-		Visit(p);
+		if (p == nullptr)
+			cout << "null";
+		else
+			ReflTraitsVisitor::Visit(p);
 	}
 
 	template<typename T>
@@ -78,7 +82,7 @@ protected:
 		size_t num = p.size();
 		size_t i = 0;
 		for (auto var : p) {
-			Visit(var);
+			ReflTraitsVisitor::Visit(var);
 			if (++i < num)
 				cout << ",";
 		}
@@ -139,7 +143,7 @@ private:
 			cout << "," << endl;
 			size_t i = 0;
 			for (auto [n, v] : nv) {
-				if (ReflectionMngr::Instance().GetReflction(obj)->Meta(n + "::" + Component::Meta::not_serialize) == Component::Meta::not_serialize_value)
+				if (ReflectionMngr::Instance().GetReflction(obj)->FieldMeta(n, ReflAttr::is_not_serialize) == ReflAttr::null)
 					continue;
 				prefix(); cout << "\"" << n << "\"" << ": ";
 				VarPtrVisitor<VarSerializer>::Visit(v);
@@ -172,7 +176,7 @@ private:
 };
 
 int main() {
-	SceneReflectionInit();
+	Scene::OnRegist();
 
 	Scene scene("scene");
 

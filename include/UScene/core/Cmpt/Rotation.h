@@ -5,7 +5,10 @@
 #include <UGM/quat.h>
 
 namespace Ubpa::Cmpt {
-	struct Rotation : Component {
+	class Rotation : Component {
+	public:
 		quatf value{ quatf::identity() };
+
+		static void OnRegist();
 	};
 }

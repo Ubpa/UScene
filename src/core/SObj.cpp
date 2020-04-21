@@ -1,5 +1,7 @@
 #include <UScene/core/SObj.h>
 
+#include "detail/dynamic_reflection/SObj.inl"
+
 using namespace Ubpa;
 using namespace std;
 
@@ -20,7 +22,7 @@ void SObj::AddChild(SObj* sobj) {
 	if (sobj->parent)
 		sobj->parent->children->erase(sobj);
 
-	sobj->parent = this;
+	sobj->parent.val = this;
 	children->insert(sobj);
 }
 
@@ -54,4 +56,11 @@ bool SObj::IsAlive() const noexcept {
 // Attach, Detach, Release, World::CreateEntity
 void SObj::AddCommand(const std::function<void()>& command) {
 	entity->AddCommand(command);
+}
+
+void SObj::OnRegist() {
+	SObj tmp;
+	SObj* ptmp = &tmp;
+	vtable_of<SObj>::regist(ptmp);
+	detail::dynamic_reflection::ReflRegist_SObj();
 }

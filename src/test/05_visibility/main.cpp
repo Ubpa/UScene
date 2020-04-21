@@ -9,6 +9,8 @@ using namespace std;
 using namespace Ubpa;
 
 int main() {
+	Scene::OnRegist();
+
 	constexpr size_t width = 400;
 	constexpr size_t height = 200;
 

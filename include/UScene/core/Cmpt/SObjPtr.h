@@ -10,7 +10,11 @@ namespace Ubpa {
 }
 
 namespace Ubpa::Cmpt {
-	struct SObjPtr : Component {
-		Read<Scene, SObj*> sobj{ nullptr };
+	class SObjPtr : Component {
+	public:
+		[[is_not_serialize]]
+		Read<Scene, SObj*> value{ nullptr };
+
+		static void OnRegist();
 	};
 }

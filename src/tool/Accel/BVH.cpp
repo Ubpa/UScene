@@ -133,7 +133,7 @@ void BVH::Init(Scene* scene) {
 	Clear();
 	BVHInitializer initializer(this);
 	scene->Each([&initializer](Cmpt::Geometry* geo, Cmpt::SObjPtr* ptr) {
-		initializer.sobj = ptr->sobj;
+		initializer.sobj = ptr->value;
 		initializer.Visit(geo);
 	});
 

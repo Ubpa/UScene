@@ -46,5 +46,7 @@ namespace Ubpa {
 
 		void GenNormals();
 		void GenTangents();
+
+		static void OnRegist();
 	};
 }

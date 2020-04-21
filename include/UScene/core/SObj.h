@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning(disable : 5030)
 
 #include <UECS/Entity.h>
 
@@ -14,6 +15,7 @@ namespace Ubpa {
 	class SObj {
 	public:
 		std::string name;
+		[[is_not_serialize]]
 		Read<SObj, SObj*> parent{ nullptr };
 		Read<SObj, std::set<SObj*>> children;
 
@@ -37,7 +39,6 @@ namespace Ubpa {
 		template<typename... Cmpts>
 		std::tuple<Cmpts *...> Attach();
 
-		// not run in Scene.Each
 		template<typename Cmpt>
 		Cmpt* GetOrAttach();
 
@@ -48,6 +49,8 @@ namespace Ubpa {
 
 		// Attach, Detach, Release, World::CreateEntity
 		void AddCommand(const std::function<void()>& command);
+
+		static void OnRegist();
 	protected:
 		SObj() : entity{ nullptr } {}
 		SObj(Scene* scene, Entity* entity, const std::string& name);

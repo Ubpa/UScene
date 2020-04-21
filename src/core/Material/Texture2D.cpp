@@ -2,6 +2,8 @@
 
 #include <UBL/RsrcMngr.h>
 
+#include "detail/dynamic_reflection/Texture2D.inl"
+
 using namespace Ubpa;
 using namespace std;
 
@@ -11,8 +13,8 @@ Texture2D::Texture2D(const std::string& path)
 }
 
 void Texture2D::SetPath(const string& path) {
-	this->path = path;
-	img = RsrcMngr<Image>::Instance().GetOrCreate(path);
+	this->path.val = path;
+	img.val = RsrcMngr<Image>::Instance().GetOrCreate(path);
 }
 
 rgbaf Texture2D::Sample(pointf2 uv) const {
@@ -49,4 +51,8 @@ rgbaf Texture2D::Sample(pointf2 uv) const {
 	default:
 		return { 1.f };
 	}
+}
+
+void Texture2D::OnRegist() {
+	detail::dynamic_reflection::ReflRegist_Texture2D();
 }

@@ -16,6 +16,8 @@ using namespace std;
 using namespace Ubpa;
 
 int main() {
+	Scene::OnRegist();
+
 	Scene scene("scene");
 
 	auto [sobj0, camera] = scene.CreateSObj<Cmpt::Camera>("sobj0");

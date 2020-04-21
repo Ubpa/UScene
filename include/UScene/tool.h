@@ -7,5 +7,3 @@
 
 #include "tool/Serializer/DeserializerJSON.h"
 #include "tool/Serializer/SerializerJSON.h"
-
-#include "tool/SceneReflectionInit.h"

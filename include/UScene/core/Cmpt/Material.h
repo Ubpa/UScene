@@ -11,18 +11,13 @@ namespace Ubpa::Cmpt {
 	public:
 		Read<Material, Ubpa::Material*> material{ nullptr };
 
-		void SetMaterial(Ubpa::Material* material) {
-			delete this->material;
-			this->material = material;
-		}
+		Material();
+		virtual ~Material();
 
-		Material() = default;
-		virtual ~Material() { delete material; }
+		Material(Material&& material) noexcept;
 
-		Material(Material && material) noexcept
-			: material{ material.material }
-		{
-			material.material = nullptr;
-		}
+		void SetMaterial(Ubpa::Material* material);
+
+		static void OnRegist();
 	};
 }

@@ -17,5 +17,3 @@ Ubpa_AddTarget_GDR(MODE "LIB"
 	INTERFACE_INC ON
 	PUBLIC_GLIBS "Ubpa::${core}"
 )
-
-Ubpa_GetTargetName(cur ${CMAKE_CURRENT_SOURCE_DIR})

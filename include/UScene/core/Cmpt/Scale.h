@@ -5,7 +5,10 @@
 #include <UGM/scale.h>
 
 namespace Ubpa::Cmpt {
-	struct Scale : Component {
+	class Scale : Component {
+	public:
 		scalef3 value{ 1.f };
+
+		static void OnRegist();
 	};
 }

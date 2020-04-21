@@ -11,18 +11,12 @@ namespace Ubpa::Cmpt {
 	public:
 		Read<Geometry, Primitive*> primitive{ nullptr };
 
-		void SetPrimitive(Primitive* primitive) {
-			delete this->primitive;
-			this->primitive = primitive;
-		}
+		Geometry();
+		Geometry(Geometry&& geo) noexcept;
+		virtual ~Geometry();
 
-		Geometry() = default;
-		virtual ~Geometry() { delete primitive; }
+		static void OnRegist();
 
-		Geometry(Geometry&& geo) noexcept
-			: primitive{ geo.primitive }
-		{
-			geo.primitive = nullptr;
-		}
+		void SetPrimitive(Primitive* primitive);
 	};
 }

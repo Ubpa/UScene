@@ -47,10 +47,8 @@ namespace Ubpa {
 	template<typename Cmpt>
 	Cmpt* SObj::GetOrAttach() {
 		auto cmpt = Get<Cmpt>();
-		if (!cmpt) {
+		if (!cmpt)
 			std::tie(cmpt) = Attach<Cmpt>();
-			cmpt->sobj = this;
-		}
 		return cmpt;
 	}
 

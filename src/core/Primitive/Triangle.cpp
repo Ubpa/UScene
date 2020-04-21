@@ -2,6 +2,8 @@
 
 #include <UScene/core/Primitive/TriMesh.h>
 
+#include "detail/dynamic_reflection/Triangle.inl"
+
 using namespace Ubpa;
 using namespace std;
 
@@ -33,4 +35,8 @@ const vecf3 Triangle::lerpTangent(float w, float u, float v) const {
 	const auto& tangents = mesh->tangents.get();
 	vecf3 tangent = w * tangents[indices[0]] + u * tangents[indices[1]] + v * tangents[indices[2]];
 	return tangent.normalize();
+}
+
+void Triangle::OnRegist() {
+	detail::dynamic_reflection::ReflRegist_Triangle();
 }

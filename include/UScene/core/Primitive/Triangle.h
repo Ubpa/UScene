@@ -19,5 +19,7 @@ namespace Ubpa {
 		const pointf3 lerpPosition(float w, float u, float v) const;
 		const normalf lerpNormal(float w, float u, float v) const;
 		const vecf3 lerpTangent(float w, float u, float v) const;
+
+		static void OnRegist();
 	};
 }

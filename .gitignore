@@ -270,6 +270,7 @@ __pycache__/
 *.zip
 
 _deps/
+dynamic_reflection/
 
 *.uscene
 

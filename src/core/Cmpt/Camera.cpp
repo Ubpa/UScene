@@ -1,6 +1,10 @@
 #include <UScene/core/Cmpt/Camera.h>
+#include <UScene/core/SObj.h>
+
+#include "detail/dynamic_reflection/Camera.inl"
 
 using namespace Ubpa;
+using namespace std;
 
 const Cmpt::Camera::CoordinateSystem Cmpt::Camera::GenCoordinateSystem(const transformf& l2w) const noexcept {
 	CoordinateSystem rst;
@@ -20,4 +24,8 @@ const Cmpt::Camera::CoordinateSystem Cmpt::Camera::GenCoordinateSystem(const tra
 	rst.up = height * nUp;
 
 	return rst;
+}
+
+void Cmpt::Camera::OnRegist() {
+	detail::dynamic_reflection::ReflRegist_Camera();
 }

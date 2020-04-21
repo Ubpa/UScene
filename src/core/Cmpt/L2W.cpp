@@ -1,11 +1,17 @@
 #include <UScene/core/Cmpt/L2W.h>
 
+#include "detail/dynamic_reflection/L2W.inl"
+
 #include <UScene/core/Cmpt/SObjPtr.h>
 #include <UScene/core/Cmpt/Transform.h>
 
 #include <UScene/core/SObj.h>
 
 using namespace Ubpa;
+
+void Cmpt::L2W::OnRegist() {
+	detail::dynamic_reflection::ReflRegist_L2W();
+}
 
 const pointf3 Cmpt::L2W::WorldPos() const noexcept {
 	return value->decompose_position();

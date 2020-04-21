@@ -35,5 +35,7 @@ namespace Ubpa {
 			metalness_texture{ metalness_texture },
 			normal_map{ normal_map }
 			{}
+
+		static void OnRegist();
 	};
 }

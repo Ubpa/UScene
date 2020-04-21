@@ -5,7 +5,10 @@
 #include <UGM/point.h>
 
 namespace Ubpa::Cmpt {
-	struct Position : Component {
+	class Position : Component {
+	public:
 		pointf3 value{ 0.f };
+
+		static void OnRegist();
 	};
 }
