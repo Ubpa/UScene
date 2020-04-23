@@ -9,10 +9,11 @@
 namespace Ubpa::Cmpt {
 	class Root;
 
+	// local to world transformation
 	class L2W : public Component {
 	public:
 		[[is_not_serialize]]
-		Read<Root, transformf> value;
+		Read<Root, transformf> value{ transformf::eye() };
 
 		static void OnRegist();
 

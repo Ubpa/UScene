@@ -5,7 +5,7 @@
 #include <UDP/Reflection/VarPtrVisitor.h>
 #include <UDP/Reflection/Reflection.h>
 
-#include <UGM/UGM>
+#include <UGM/UGM.h>
 
 #include <string>
 #include <functional>

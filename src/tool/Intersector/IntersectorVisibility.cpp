@@ -3,7 +3,7 @@
 #include <UScene/core.h>
 #include <UScene/tool/Accel/BVH.h>
 
-#include <UGM/UGM>
+#include <UGM/UGM.h>
 
 #include <stack>
 

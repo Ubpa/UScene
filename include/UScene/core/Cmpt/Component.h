@@ -1,6 +1,8 @@
 #pragma once
 #include "../ReflAttrs.h"
 
+#include <UECS/CmptTag.h>
+
 namespace Ubpa {
 	// vtable is typeid
 	// alignas for __m128

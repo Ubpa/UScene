@@ -1,4 +1,4 @@
-#include <UScene/tool/Intersector/IntersectorClostest.h>
+#include <UScene/tool/Intersector/IntersectorClosest.h>
 
 #include <UScene/tool/Accel/BVH.h>
 #include <UScene/core/Primitive/Square.h>
@@ -6,19 +6,19 @@
 #include <UScene/core/Primitive/Sphere.h>
 #include <UScene/core/Primitive/TriMesh.h>
 
-#include <UGM/UGM>
+#include <UGM/UGM.h>
 
 #include <stack>
 
 using namespace Ubpa;
 using namespace std;
 
-IntersectorClostest::IntersectorClostest()
+IntersectorClosest::IntersectorClosest()
 	: r{ rayf3{pointf3{}, vecf3{}} }, primitive{ nullptr }, wuv{} {
 	RegistC<Square, Sphere, Triangle>();
 }
 
-const IntersectorClostest::Rst IntersectorClostest::Visit(const BVH* bvh, const rayf3& _r) const {
+const IntersectorClosest::Rst IntersectorClosest::Visit(const BVH* bvh, const rayf3& _r) const {
 	// init
 	r = _r;
 	rst.sobj = nullptr;
@@ -65,47 +65,50 @@ const IntersectorClostest::Rst IntersectorClostest::Visit(const BVH* bvh, const 
 	if (primitive) { // is intersected
 		if (vtable_is<Triangle>(primitive)) { // deferred calculation
 			const Triangle* tri = static_cast<const Triangle*>(primitive);
-			rst.norm = tri->lerpNormal(wuv[0], wuv[1], wuv[2]);
+			rst.n = tri->lerpNormal(wuv[0], wuv[1], wuv[2]);
 			rst.tangent = tri->lerpTangent(wuv[0], wuv[1], wuv[2]);
 			rst.uv = tri->lerpUV(wuv[0], wuv[1], wuv[2]);
 		}
 
 		rst.sobj = bvh->GetSObj(primitive);
 		const auto& l2w = bvh->GetL2W(primitive);
-		rst.norm = (l2w * rst.norm).normalize();
-		rst.tangent = (l2w * rst.tangent).normalize();
+		rst.n = (l2w.transpose().inverse() * rst.n).normalize();
+		vecf3 n = rst.n.cast_to<vecf3>();
+		vecf3 tangent = l2w * rst.tangent;
+		rst.tangent = (tangent - tangent.dot(n) * n).normalize();
+		rst.pos = r.at(r.tmax);
 	}
 
 	return rst;
 }
 
-void IntersectorClostest::ImplVisit(const Square* primitive) {
+void IntersectorClosest::ImplVisit(const Square* primitive) {
 	auto [isIntersect, t, hitPos] = r.intersect_std_square();
 
 	if (isIntersect) {
 		r.tmax = t;
 		this->primitive = primitive;
 
-		rst.norm = normalf{ 0, -sgn(r.dir[1]), 0 };
+		rst.n = normalf{ 0, -sgn(r.dir[1]), 0 };
 		rst.tangent = vecf3{ 1,0,0 };
 		rst.uv = pointf2{ (hitPos[0] + 1) / 2, (1 - hitPos[1]) / 2 };
 	}
 }
 
-void IntersectorClostest::ImplVisit(const Sphere* primitive) {
+void IntersectorClosest::ImplVisit(const Sphere* primitive) {
 	auto [isIntersect, t] = r.intersect_std_sphere();
 
 	if (isIntersect) {
 		r.tmax = t;
 		this->primitive = primitive;
 
-		rst.norm = r.at(t).cast_to<normalf>().normalize();
-		rst.tangent = rst.norm.to_sphere_tangent();
-		rst.uv = rst.norm.to_sphere_texcoord();
+		rst.n = r.at(t).cast_to<normalf>().normalize();
+		rst.tangent = rst.n.to_sphere_tangent();
+		rst.uv = rst.n.to_sphere_texcoord();
 	}
 }
 
-void IntersectorClostest::ImplVisit(const Triangle* primitive) {
+void IntersectorClosest::ImplVisit(const Triangle* primitive) {
 	auto mesh = primitive->mesh;
 
 	auto p0 = mesh->positions->at(primitive->indices[0]);

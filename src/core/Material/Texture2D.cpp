@@ -34,7 +34,7 @@ rgbaf Texture2D::Sample(pointf2 uv) const {
 			uv[i] = 1 - std::abs(uv[i] - 1 - std::floor(uv[i] / 2));
 			break;
 		}
-		if (inv_u)
+		if (inv[i])
 			uv[i] = 1 - uv[i];
 	}
 

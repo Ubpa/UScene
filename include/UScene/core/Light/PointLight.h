@@ -10,7 +10,7 @@ namespace Ubpa {
 		float intensity;
 		rgbf color;
 
-		rgbf radiance_factor() const noexcept { return intensity * color; }
+		rgbf RadianceFactor() const noexcept { return intensity * color; }
 
 		PointLight(float intensity = 1.f, const rgbf& color = rgbf{ 1.f,1.f,1.f });
 

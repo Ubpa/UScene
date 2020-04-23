@@ -2,7 +2,7 @@
 
 #include "UJsonWriter.h"
 
-#include <UGM/UGM>
+#include <UGM/UGM.h>
 
 #include <UDP/Reflection/Reflection.h>
 #include <UDP/Reflection/VarPtrVisitor.h>

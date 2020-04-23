@@ -6,9 +6,9 @@
 
 using namespace Ubpa;
 
-rgbf AreaLight::radiance(const pointf2& uv) const noexcept {
+rgbf AreaLight::Radiance(const pointf2& uv) const noexcept {
 	if (!texture)
-		return radiance_factor();
+		return RadianceFactor();
 
 	return texture->Sample(uv).to_rgb();
 }

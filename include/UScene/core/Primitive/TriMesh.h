@@ -2,7 +2,7 @@
 
 #include "Primitive.h"
 
-#include <UGM/UGM>
+#include <UGM/UGM.h>
 #include <UDP/Basic/Read.h>
 
 #include <vector>

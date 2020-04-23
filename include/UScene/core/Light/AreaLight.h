@@ -15,8 +15,8 @@ namespace Ubpa {
 		rgbf color;
 		Texture2D* texture;
 
-		rgbf radiance_factor() const noexcept { return intensity * color; }
-		rgbf radiance(const pointf2& uv) const noexcept;
+		rgbf RadianceFactor() const noexcept { return intensity * color; }
+		rgbf Radiance(const pointf2& uv) const noexcept;
 
 		AreaLight(float intensity = 1.f, const rgbf& color = rgbf{ 1.f }, Texture2D* texture = nullptr)
 			: intensity{ intensity }, color{ color }, texture{ texture }{}

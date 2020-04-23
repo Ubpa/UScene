@@ -14,6 +14,7 @@ namespace Ubpa {
 		static constexpr pointf3 center{ 0,0,0 };
 		static constexpr normalf normal{ 0,1,0 };
 		static constexpr float side_length{ 2.f };
+		static constexpr float area = side_length * side_length;
 
 		static void OnRegist();
 	};

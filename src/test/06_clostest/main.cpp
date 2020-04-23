@@ -1,5 +1,5 @@
 #include <UScene/core.h>
-#include <UScene/tool/Intersector/IntersectorClostest.h>
+#include <UScene/tool/Intersector/IntersectorClosest.h>
 #include <UScene/tool/Accel/BVH.h>
 
 #include <fstream>
@@ -44,7 +44,7 @@ int main() {
 
 	
 	BVH bvh(&scene);
-	IntersectorClostest intersector;
+	IntersectorClosest intersector;
 
 	Image img(width, height, 3);
 	for (size_t j = 0; j < height; j++) {
@@ -54,7 +54,7 @@ int main() {
 			rayf3 r = camera->GenRay(u, v, cameraCoordSystem);
 			auto rst = intersector.Visit(&bvh, r);
 			if (rst.IsIntersected()) {
-				auto color = ((rst.norm + normalf{ 1.f }) / 2.f).cast_to<rgbf>();
+				auto color = ((rst.n + normalf{ 1.f }) / 2.f).cast_to<rgbf>();
 				img.At(i, j, 0) = color[0];
 				img.At(i, j, 1) = color[1];
 				img.At(i, j, 2) = color[2];
