@@ -71,14 +71,58 @@ rgbf stdBRDF::BRDF(const rgbf& albedo, float metalness, float roughness, const s
 	return diffuse + specular;
 }
 
+float stdBRDF::SampleDiffusePD(const rgbf& albedo, float metalness, float roughness, const svecf& wo) {
+	float alpha = Alpha(roughness);
+	rgbf f0 = F0(metalness, albedo);
+	constexpr svecf predict_wm = svecf{ 0,0,1 };
+	const svecf predict_wi = wo.reflect();
+	rgbf predict_Fresnel = rgbf::mid(rgbf{ 1.f }, f0);
+	float predict_GGX_D = 1 / (PI<float> * pow2(alpha)); // GGX_D(alpha, predict_wm);
+	float predict_GGX_G = GGX_G(alpha, predict_wi, wo, predict_wm);
+	float predict_diffuse = ((rgbf{ 1.f }-predict_Fresnel) / 2 * albedo).gray() * (1 - metalness) / PI<float>;
+	float predict_specular = predict_Fresnel.gray() * predict_GGX_D * predict_GGX_G / (4 * wo.cos_stheta());
+	float p_diffuse = predict_diffuse / (predict_diffuse + predict_specular);
+	// 1 - p_diffuse
+	// float p_specular = predict_specular / (predict_diffuse + predict_specular);
+
+	return p_diffuse;
+}
+
 float stdBRDF::PDF(const rgbf& albedo, float metalness, float roughness, const svecf& wi, const svecf& wo) {
-	// TODO
-	return 1 / (2 * PI<float>);
+	float alpha = Alpha(roughness);
+
+	float p_diffuse = SampleDiffusePD(albedo, metalness, roughness, wo);
+
+	svecf wm = (wi + wo).normalize();
+	float dwm_dwi = 1.f / (4 * std::abs(wi.dot(wm)));
+	float pd_specular = GGX_D(alpha, wm) * dwm_dwi;
+	float pd_diffuse = wi.cos_stheta() / PI<float>;
+
+	float pd = p_diffuse * pd_diffuse + (1 - p_diffuse) * pd_specular;
+
+	return pd;
 }
 
 tuple<svecf, float> stdBRDF::Sample(const rgbf& albedo, float metalness, float roughness, const svecf& wo) {
-	// TODO
-	svec wi = cos_weighted_on_hemisphere<float>().cast_to<svecf>();
-	float pdf = 1 / (2 * PI<float>);
-	return { wi, pdf };
+	float alpha = Alpha(roughness);
+
+	float p_diffuse = SampleDiffusePD(albedo, metalness, roughness, wo);
+
+	svecf wi;
+	if (rand01<float>() < p_diffuse) {
+		// diffuse
+		wi = cos_weighted_on_hemisphere<float>().cast_to<svecf>();
+	}
+	else {
+		// specular
+		wi = sample_GGX_D(alpha);
+	}
+	svecf wm = (wi + wo).normalize();
+
+	float pd_diffuse = wi.cos_stheta() / PI<float>;
+	float pd_specular = GGX_D(alpha, wm) / (4 * std::abs(wi.dot(wm)));
+	
+	float pd = p_diffuse * pd_diffuse + (1 - p_diffuse) * pd_specular;
+
+	return { wm, pd };
 }
