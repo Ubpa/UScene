@@ -22,7 +22,7 @@ void SObj::AddChild(SObj* sobj) {
 	if (sobj->parent)
 		sobj->parent->children->erase(sobj);
 
-	sobj->parent.val = this;
+	sobj->parent = this;
 	children->insert(sobj);
 }
 

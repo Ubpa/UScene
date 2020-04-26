@@ -16,13 +16,13 @@ namespace Ubpa {
 
 		~BVHNode();
 
-		bool IsLeaf() const { return l == nullptr && r == nullptr; }
-		const bboxf3& GetBBox() const { return box; }
-		size_t GetPrimitiveOffset() const { return primitiveOffset; }
-		size_t GetPrimitiveNum() const { return primitiveNum; }
-		Axis GetAxis() const { return axis; }
-		BVHNode* GetL() const { return l; }
-		BVHNode* GetR() const { return r; }
+		bool IsLeaf() const noexcept { return l == nullptr && r == nullptr; }
+		const bboxf3& GetBBox() const noexcept { return box; }
+		size_t GetPrimitiveOffset() const noexcept { return primitiveOffset; }
+		size_t GetPrimitiveNum() const noexcept { return primitiveNum; }
+		Axis GetAxis() const noexcept { return axis; }
+		BVHNode* GetL() const noexcept { return l; }
+		BVHNode* GetR() const noexcept { return r; }
 
 	private:
 		// 调整 primitives 的顺序，设置 l, r, box 和 axis

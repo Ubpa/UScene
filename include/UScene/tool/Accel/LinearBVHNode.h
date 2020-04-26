@@ -20,8 +20,8 @@ namespace Ubpa {
 		}
 
 	public:
-		const bboxf3& GetBox() const { return box; }
-		bool IsLeaf() const { return shapesNum != 0; }
+		const bboxf3& GetBox() const noexcept { return box; }
+		bool IsLeaf() const noexcept { return shapesNum != 0; }
 		const std::vector<size_t> PrimitiveIndices() const {
 			assert(IsLeaf());
 			std::vector<size_t> rst;
@@ -29,12 +29,12 @@ namespace Ubpa {
 				rst.push_back(shapesOffset + i);
 			return rst;
 		}
-		static size_t FirstChildIdx(size_t nodeIdx) { return nodeIdx + 1; }
-		size_t GetSecondChildIdx() const {
+		static size_t FirstChildIdx(size_t nodeIdx) noexcept { return nodeIdx + 1; }
+		size_t GetSecondChildIdx() const noexcept {
 			assert(!IsLeaf());
 			return secondChildIdx;
 		}
-		Axis GetAxis() const {
+		Axis GetAxis() const noexcept {
 			assert(!IsLeaf());
 			return axis;
 		}

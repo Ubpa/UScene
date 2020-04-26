@@ -12,10 +12,10 @@ using namespace Ubpa;
 
 SerializerJSON::SerializerJSON() {
 	// regist all class in reflections
-	ReflTraitsIniter::Instance().InitC(*this);
+	ReflTraitsIniter::Instance().Init(*this);
 
 	// regist all member variable type
-	VarPtrVisitor<SerializerJSON>::RegistC<
+	VarPtrVisitor<SerializerJSON>::Regist<
 		bool,
 		float, double,
 		int8_t, int16_t, int32_t, int64_t,
@@ -76,13 +76,13 @@ string SerializerJSON::Serialize(const SObj* sobj) {
 	return writer.Rst();
 }
 
-void SerializerJSON::Receive(const void* obj, string_view name, const xMap<string, shared_ptr<const VarPtrBase>>& nv) {
+void SerializerJSON::Receive(void* obj, std::string_view name, ReflectionBase& refl) {
 	writer.StartObject();
 	writer.Key("type");
 	writer.String(name.data());
 
-	for (auto [n, v] : nv) {
-		if (ReflectionMngr::Instance().GetReflction(obj)->FieldMeta(n, ReflAttr::is_not_serialize) == ReflAttr::null)
+	for (auto [n, v] : refl.VarPtrs(obj)) {
+		if (refl.FieldMeta(n, ReflAttr::not_serialize) == ReflAttr::default_value)
 			continue;
 		writer.Key(n.c_str());
 		VarPtrVisitor<SerializerJSON>::Visit(v); // serialize variable

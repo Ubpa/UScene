@@ -13,8 +13,8 @@ Texture2D::Texture2D(const std::string& path)
 }
 
 void Texture2D::SetPath(const string& path) {
-	this->path.val = path;
-	img.val = RsrcMngr<Image>::Instance().GetOrCreate(path);
+	this->path = path;
+	img = RsrcMngr<Image>::Instance().GetOrCreate(path);
 }
 
 rgbaf Texture2D::Sample(pointf2 uv) const {

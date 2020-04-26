@@ -1,20 +1,29 @@
 #pragma once
 
 #include "Primitive.h"
+#include "Triangle.h"
 
 #include <UGM/UGM.h>
 #include <UDP/Basic/Read.h>
+#include <UBL/Pool.h>
 
 #include <vector>
 
 namespace Ubpa {
 	class TriMesh : public Primitive {
 	public:
+		[[not_UI]]
 		Read<TriMesh, std::vector<valu3>> indices; // unsigned is for OpenGL
+		[[not_UI]]
 		Read<TriMesh, std::vector<pointf3>> positions;
+		[[not_UI]]
 		Read<TriMesh, std::vector<pointf2>> texcoords;
+		[[not_UI]]
 		Read<TriMesh, std::vector<normalf>> normals;
+		[[not_UI]]
 		Read<TriMesh, std::vector<vecf3>> tangents;
+		[[not_serialize, not_UI]]
+		Read<TriMesh, std::vector<const Triangle*>> triangles;
 
 		TriMesh() = default;
 
@@ -48,5 +57,8 @@ namespace Ubpa {
 		void GenTangents();
 
 		static void OnRegist();
+
+	private:
+		Pool<Triangle> triPool;
 	};
 }

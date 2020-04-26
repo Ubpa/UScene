@@ -5,6 +5,7 @@
 #include <UGM/UGM.h>
 
 #include <UDP/Reflection/Reflection.h>
+#include <UDP/Reflection/ReflTraits.h>
 #include <UDP/Reflection/VarPtrVisitor.h>
 
 #include <set>
@@ -13,7 +14,7 @@ namespace Ubpa {
 	class Scene;
 	class SObj;
 
-	class SerializerJSON : public ISerializer, public VarPtrVisitor<SerializerJSON> {
+	class SerializerJSON : public ISerializer, public ReflTraitsVisitor, public VarPtrVisitor<SerializerJSON> {
 	public:
 		SerializerJSON();
 
@@ -91,14 +92,14 @@ namespace Ubpa {
 		void ImplVisit(const Ubpa::transform<T>& val);
 
 	private:
-		virtual void Receive(const void* obj, std::string_view name, const xMap<std::string, std::shared_ptr<const VarPtrBase>>& nv) override;
+		virtual void Receive(void* obj, std::string_view name, ReflectionBase& refl) override;
 
 	private:
 		UJsonWriter writer;
 		std::map<const void*, std::function<void(const void*)>> callbacks; // key is vtable
 
 		using ReflTraitsVisitor::Visit;
-		using VarPtrVisitor<SerializerJSON>::RegistC;
+		using VarPtrVisitor<SerializerJSON>::Regist;
 	};
 }
 

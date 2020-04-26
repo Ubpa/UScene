@@ -18,10 +18,10 @@ Cmpt::Geometry::~Geometry() { delete primitive; }
 Cmpt::Geometry::Geometry(Geometry&& geo) noexcept
 	: primitive{ geo.primitive }
 {
-	geo.primitive.val = nullptr;
+	geo.primitive= nullptr;
 }
 
 void Cmpt::Geometry::SetPrimitive(Primitive* primitive) {
 	delete this->primitive;
-	this->primitive.val = primitive;
+	this->primitive= primitive;
 }

@@ -17,13 +17,13 @@ void Cmpt::Root::OnRegist() {
 
 void Cmpt::Root::OnUpdate(const Transform* tsfm, L2W* l2w, const SObjPtr* ptr) const {
 	stack<SObj*> sobjStack;
-	l2w->value.val = tsfm->value;
+	l2w->value= tsfm->value;
 	for (auto child : ptr->value->children)
 		sobjStack.push(child);
 	while (!sobjStack.empty()) {
 		auto sobj = sobjStack.top();
 		sobjStack.pop();
-		sobj->Get<L2W>()->value.val = sobj->parent->Get<L2W>()->value * sobj->Get<Transform>()->value;
+		sobj->Get<L2W>()->value= sobj->parent->Get<L2W>()->value * sobj->Get<Transform>()->value;
 		for (auto child : sobj->children)
 			sobjStack.push(child);
 	}

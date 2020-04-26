@@ -1,15 +1,11 @@
 #pragma once
 
 #include "LinearBVHNode.h"
-#include "detail/PrimitiveGetter.h"
 
-#include <UGM/bbox.h>
 #include <UGM/transform.h>
 
 #include <vector>
 #include <unordered_map>
-
-#include <UDP/Visitor/Visitor.h>
 
 namespace Ubpa {
 	class SObj;
@@ -20,7 +16,6 @@ namespace Ubpa {
 	class BVH {
 	public:
 		BVH(Scene* scene = nullptr);
-		~BVH();
 
 		void Init(Scene* scene);
 		void Clear();
@@ -44,9 +39,6 @@ namespace Ubpa {
 		friend class BVHInitializer;
 
 		std::vector<const Primitive*> primitives;
-		std::vector<const Primitive*> need_delete_primitives;
-
-		detail::Accel_::PrimitiveGetter primitiveGetter;
 
 		std::vector<LinearBVHNode> linearBVHNodes;
 	};

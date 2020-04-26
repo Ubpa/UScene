@@ -23,7 +23,7 @@ namespace Ubpa {
 		WrapMode wrap_v{ WrapMode::Clamp };
 		SampleMode sample_mode{ SampleMode::Linear };
 		Read<Texture2D, std::string> path;
-		[[is_not_serialize]]
+		[[not_serialize]]
 		Read<Texture2D, const Image*> img{ nullptr };
 
 		void SetPath(const std::string& path);

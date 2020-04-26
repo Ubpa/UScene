@@ -15,7 +15,7 @@ namespace Ubpa {
 	class SObj {
 	public:
 		std::string name;
-		[[is_not_serialize]]
+		[[not_serialize]]
 		Read<SObj, SObj*> parent{ nullptr };
 		Read<SObj, std::set<SObj*>> children;
 

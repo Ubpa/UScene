@@ -28,7 +28,7 @@ function(GenRefl dir)
 	)
 endfunction()
 
-if(true)
+if(false)
 GenRefl(Cmpt)
 GenRefl(Material)
 GenRefl(Light)

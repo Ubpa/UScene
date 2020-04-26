@@ -9,7 +9,7 @@
 using namespace Ubpa;
 
 void Cmpt::Transform::OnUpdate(const Position* p, const Rotation* r, const Scale* s) {
-	value.val = transformf(p->value, s->value, r->value);
+	value= transformf(p->value, s->value, r->value);
 }
 
 void Cmpt::Transform::OnRegist() {

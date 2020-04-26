@@ -187,8 +187,13 @@ bool TriMesh::Init(const vector<valu3>& indices,
 		return false;
 	}
 
-	this->indices.val = indices;
-	this->positions.val = positions;
+	this->indices = indices;
+
+	triangles->resize(indices.size());
+	for (size_t i = 0; i < indices.size(); i++)
+		triangles[i] = triPool.Request(this, indices[i]);
+
+	this->positions = positions;
 
 	if (texcoords.empty()) {
 		this->texcoords->resize(positions.size());
@@ -197,17 +202,17 @@ bool TriMesh::Init(const vector<valu3>& indices,
 			this->texcoords->at(i) = (positions[i] - center).normalize().cast_to<normalf>().to_sphere_texcoord();
 	}
 	else
-		this->texcoords.val = texcoords;
+		this->texcoords = texcoords;
 
 	if (normals.empty())
 		GenNormals();
 	else
-		this->normals.val = normals;
+		this->normals = normals;
 
 	if (tangents.size() == 0)
 		GenTangents();
 	else
-		this->tangents.val = tangents;
+		this->tangents = tangents;
 
 	return true;
 }
@@ -222,6 +227,8 @@ void TriMesh::Clear() {
 	texcoords->clear();
 	normals->clear();
 	tangents->clear();
+	triPool.Clear();
+	triangles->clear();
 }
 
 void TriMesh::GenNormals() {

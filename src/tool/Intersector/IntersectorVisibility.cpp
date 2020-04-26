@@ -10,16 +10,30 @@
 using namespace Ubpa;
 using namespace std;
 
-IntersectorVisibility::IntersectorVisibility()
-	: isIntersect{ false }, r{ rayf3{pointf3{}, vecf3{}} } {
-	RegistC<Square, Sphere, Triangle>();
+IntersectorVisibility::IntersectorVisibility() {
+	auto intersect_square = [](const Square*, const rayf3& r) {
+		auto [isIntersect, t, hitPos] = r.intersect_std_square();
+		return isIntersect;
+	};
+
+	auto intersect_sphere = [](const Sphere*, const rayf3& r) {
+		auto [isIntersect, t] = r.intersect_std_sphere();
+		return isIntersect;
+	};
+
+	auto intersect_tri = [](const Triangle* primitive, const rayf3& r) {
+		auto mesh = primitive->mesh;
+		auto p0 = mesh->positions->at(primitive->indices[0]);
+		auto p1 = mesh->positions->at(primitive->indices[1]);
+		auto p2 = mesh->positions->at(primitive->indices[2]);
+		auto [isIntersect, wuv, t] = r.intersect(trianglef3{ p0,p1,p2 });
+		return isIntersect;
+	};
+
+	visitor.Regist(intersect_square, intersect_sphere, intersect_tri);
 }
 
-bool IntersectorVisibility::Visit(const BVH* bvh, const rayf3& _r) const {
-	// init
-	r = _r;
-	isIntersect = false;
-
+bool IntersectorVisibility::Visit(const BVH* bvh, rayf3 r) const {
 	// backup
 	const pointf3 pnt = r.point;
 	const vecf3 dir = r.dir;
@@ -41,9 +55,7 @@ bool IntersectorVisibility::Visit(const BVH* bvh, const rayf3& _r) const {
 				auto primitive = bvh->GetPrimitive(primitiveIdx);
 
 				r = bvh->GetW2L(primitive) * r;
-				Visit(primitive);
-
-				if (isIntersect)
+				if (visitor.Visit(primitive, r))
 					return false;
 
 				// restore
@@ -62,23 +74,4 @@ bool IntersectorVisibility::Visit(const BVH* bvh, const rayf3& _r) const {
 	}
 
 	return true;
-}
-
-void IntersectorVisibility::ImplVisit(const Square* primitive) {
-	auto [isIntersect, t, hitPos] = r.intersect_std_square();
-	this->isIntersect = isIntersect;
-}
-
-void IntersectorVisibility::ImplVisit(const Sphere* primitive) {
-	auto [isIntersect, t] = r.intersect_std_sphere();
-	this->isIntersect = isIntersect;
-}
-
-void IntersectorVisibility::ImplVisit(const Triangle* primitive) {
-	auto mesh = primitive->mesh;
-	auto p0 = mesh->positions->at(primitive->indices[0]);
-	auto p1 = mesh->positions->at(primitive->indices[1]);
-	auto p2 = mesh->positions->at(primitive->indices[2]);
-	auto [isIntersect, wuv, t] = r.intersect(trianglef3{ p0,p1,p2 });
-	this->isIntersect = isIntersect;
 }

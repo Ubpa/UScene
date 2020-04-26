@@ -1,6 +1,6 @@
 #pragma once
 
-#include <UDP/Visitor/Visitor.h>
+#include <UDP/Visitor.h>
 
 #include <UGM/UGM.h>
 
@@ -8,17 +8,18 @@ namespace Ubpa {
 	class BVH;
 	class SObj;
 	class Primitive;
-	class Square;
-	class Sphere;
-	class Triangle;
 
-	class IntersectorClosest : public RawPtrVisitor<IntersectorClosest, Primitive> {
+	class IntersectorClosest {
 	public:
-		IntersectorClosest();
+		static IntersectorClosest& Instance() {
+			static IntersectorClosest instance;
+			return instance;
+		}
 
 		struct Rst {
 			bool IsIntersected() const noexcept { return sobj != nullptr; }
 			const SObj* sobj{ nullptr }; // intersection sobj
+			const Primitive* primitive{ nullptr }; // triangle
 			pointf3 pos; // intersection point's position
 			pointf2 uv; // texcoord
 			normalf n; // normal, normalized
@@ -28,15 +29,15 @@ namespace Ubpa {
 		const Rst Visit(const BVH* bvh, const rayf3& r) const;
 
 	protected:
-		using RawPtrVisitor<IntersectorClosest, Primitive>::Visit;
-		void ImplVisit(const Square* primitive);
-		void ImplVisit(const Sphere* primitive);
-		void ImplVisit(const Triangle* primitive);
+		IntersectorClosest();
 
 	private:
-		mutable rayf3 r;
-		mutable Rst rst;
-		mutable const Primitive* primitive;
-		mutable std::array<float, 3> wuv;
+		struct Temp {
+			Temp(const rayf3& r) :r{ r } {}
+			rayf3 r;
+			std::array<float, 3> wuv; // triangle
+		};
+
+		Visitor<void(Rst&, Temp&)> visitor;
 	};
 }

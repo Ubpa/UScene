@@ -14,7 +14,7 @@ namespace Ubpa {
 			Cmpts ...>();
 		auto entity = std::get<Entity*>(rst);
 		auto sobj = new SObj(this, entity, name);
-		std::get<Cmpt::SObjPtr*>(rst)->value.val = sobj;
+		std::get<Cmpt::SObjPtr*>(rst)->value= sobj;
 
 		(parent ? parent : root.get())->AddChild(sobj);
 

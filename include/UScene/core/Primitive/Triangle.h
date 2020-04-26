@@ -3,6 +3,7 @@
 #include "Primitive.h"
 
 #include <UGM/val.h>
+#include <UGM/bbox.h>
 
 namespace Ubpa {
 	class TriMesh;
@@ -15,10 +16,11 @@ namespace Ubpa {
 		Triangle() = default;
 		Triangle(TriMesh* mesh, const valu3& indices) : mesh{ mesh }, indices{ indices } {}
 
-		const pointf2 lerpUV(float w, float u, float v) const;
-		const pointf3 lerpPosition(float w, float u, float v) const;
-		const normalf lerpNormal(float w, float u, float v) const;
-		const vecf3 lerpTangent(float w, float u, float v) const;
+		const pointf2 LerpUV(float w, float u, float v) const;
+		const pointf3 LerpPosition(float w, float u, float v) const;
+		const normalf LerpNormal(float w, float u, float v) const;
+		const vecf3 LerpTangent(float w, float u, float v) const;
+		const bboxf3 Box() const;
 
 		static void OnRegist();
 	};

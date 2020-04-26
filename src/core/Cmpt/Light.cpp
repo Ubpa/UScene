@@ -17,10 +17,10 @@ Cmpt::Light::~Light() { delete light; }
 Cmpt::Light::Light(Light && light) noexcept
 	: light{ light.light }
 {
-	light.light.val = nullptr;
+	light.light= nullptr;
 }
 
 void Cmpt::Light::SetLight(Ubpa::Light * light) {
 	delete this->light;
-	this->light.val = light;
+	this->light= light;
 }

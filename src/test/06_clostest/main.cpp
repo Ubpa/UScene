@@ -44,7 +44,6 @@ int main() {
 
 	
 	BVH bvh(&scene);
-	IntersectorClosest intersector;
 
 	Image img(width, height, 3);
 	for (size_t j = 0; j < height; j++) {
@@ -52,7 +51,7 @@ int main() {
 		for (size_t i = 0; i < width; i++) {
 			float u = i / static_cast<float>(width);
 			rayf3 r = camera->GenRay(u, v, cameraCoordSystem);
-			auto rst = intersector.Visit(&bvh, r);
+			auto rst = IntersectorClosest::Instance().Visit(&bvh, r);
 			if (rst.IsIntersected()) {
 				auto color = ((rst.n + normalf{ 1.f }) / 2.f).cast_to<rgbf>();
 				img.At(i, j, 0) = color[0];
