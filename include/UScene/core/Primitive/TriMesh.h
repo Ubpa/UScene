@@ -8,9 +8,10 @@
 #include <UBL/Pool.h>
 
 #include <vector>
+#include <string>
 
 namespace Ubpa {
-	class TriMesh : public Primitive {
+	class [[serialize_kernel("path")]] TriMesh : public Primitive {
 	public:
 		[[not_UI]]
 		Read<TriMesh, std::vector<valu3>> indices; // unsigned is for OpenGL
@@ -24,6 +25,8 @@ namespace Ubpa {
 		Read<TriMesh, std::vector<vecf3>> tangents;
 		[[not_serialize, not_UI]]
 		Read<TriMesh, std::vector<const Triangle*>> triangles;
+		
+		Read<TriMesh, std::string> path;
 
 		TriMesh() = default;
 
@@ -35,6 +38,8 @@ namespace Ubpa {
 
 		enum class Type { Cube, Sphere, Square };
 		TriMesh(Type type);
+
+		TriMesh(const std::string& path);
 
 		// center : (0, 0, 0), side length: 2
 		void InitCubeMesh();
@@ -48,6 +53,11 @@ namespace Ubpa {
 			const std::vector<pointf2>& texcoords = std::vector<pointf2>(),
 			const std::vector<normalf>& normals = std::vector<normalf>(),
 			const std::vector<vecf3>& tangents = std::vector<vecf3>());
+
+		bool Init(const std::string& path);
+
+		// .obj
+		bool SetAndSave(const std::string& path);
 
 		bool Empty() const noexcept;
 

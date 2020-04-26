@@ -23,7 +23,7 @@ int main() {
 
 	geo1->SetPrimitive(new Sphere);
 	geo2->SetPrimitive(new Square);
-	geo3->SetPrimitive(new TriMesh(TriMesh::Type::Cube));
+	geo3->SetPrimitive(new TriMesh("../data/cube.obj"));
 	sobj0->Get<Cmpt::Position>()->value = pointf3{ 0,0,8 };
 	sobj1->Get<Cmpt::Position>()->value = pointf3{ -4,0,0 };
 	sobj2->Get<Cmpt::Rotation>()->value = quatf{ vecf3{1,0,0}, to_radian(45.f) };

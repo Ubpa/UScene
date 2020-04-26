@@ -14,15 +14,18 @@ int main() {
 	Scene scene("scene");
 
 	auto [sobj0, camera] = scene.CreateSObj<Cmpt::Camera>("sobj0");
-	auto [sobj1, geo0, mat] = scene.CreateSObj<Cmpt::Geometry, Cmpt::Material>("sobj1");
-	auto [sobj2, geo1, light] = scene.CreateSObj<Cmpt::Geometry, Cmpt::Light>("sobj2");
+	auto [sobj1, geo1, mat] = scene.CreateSObj<Cmpt::Geometry, Cmpt::Material>("sobj1");
+	auto [sobj2, geo2, light] = scene.CreateSObj<Cmpt::Geometry, Cmpt::Light>("sobj2");
+	auto [sobj3, geo3] = scene.CreateSObj<Cmpt::Geometry>("sobj3");
 
-	geo0->SetPrimitive(new Sphere);
+	geo1->SetPrimitive(new Sphere);
 	auto brdf = new stdBRDF;
 	mat->SetMaterial(brdf);
 	light->SetLight(new PointLight{ 1.f, 1.f });
-	geo1->SetPrimitive(new TriMesh(TriMesh::Type::Cube));
-
+	auto cubeMesh = new TriMesh(TriMesh::Type::Cube);
+	cubeMesh->SetAndSave("../data/cube_fromcode.obj");
+	geo2->SetPrimitive(cubeMesh);
+	geo3->SetPrimitive(new TriMesh("../data/cube.obj"));
 	scene.Start();
 	scene.Update();
 

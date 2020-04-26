@@ -170,7 +170,7 @@ vector<VarMeta> GenVarMeta(string in_public) {
     string sPrefix = fStar(fOr("static", "constexpr") + " ");
     string sVar = fOptional("\\[\\[" + fCapture(sMetas) + "\\]\\]")
         + fCapture("(?:(?:(?:static|constexpr) )*)") // prefix
-        + fCapture(fOptional("const ") + fStar(sID + "::") + sID + fExpr(" |\\[\\]|\\*(?:const ?)")) // type prefix
+        + fCapture(fOptional("const ") + fStar(sID + "::") + sID + fExpr(" |\\[\\]|\\*|&") + fOptional("const")) // type prefix
         + fCapture(sID)
         + fCapture(fOptional("\\[" + fOptional("[1-9][0-9]*") + "\\]")) // type postfix
         + ";";

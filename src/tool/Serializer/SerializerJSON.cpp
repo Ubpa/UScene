@@ -81,12 +81,27 @@ void SerializerJSON::Receive(void* obj, std::string_view name, ReflectionBase& r
 	writer.Key("type");
 	writer.String(name.data());
 
-	for (auto [n, v] : refl.VarPtrs(obj)) {
-		if (refl.FieldMeta(n, ReflAttr::not_serialize) == ReflAttr::default_value)
-			continue;
-		writer.Key(n.c_str());
-		VarPtrVisitor<SerializerJSON>::Visit(v); // serialize variable
-	}
+	do {
+		auto n2v = refl.VarPtrs(obj);
+		auto kernel = refl.Meta(ReflAttr::serialize_kernel);
+		if (!kernel.empty()) {
+			auto v = n2v[kernel];
+			auto str = static_cast<VarPtr<string>&>(*v);
+			if (!str->empty()) {
+				writer.Key(kernel.c_str());
+				VarPtrVisitor<SerializerJSON>::Visit(v); // serialize variable
+				break;
+			}
+		}
+
+		for (auto [n, v] : n2v) {
+			if (refl.FieldMeta(n, ReflAttr::not_serialize) == ReflAttr::default_value)
+				continue;
+			writer.Key(n.c_str());
+			VarPtrVisitor<SerializerJSON>::Visit(v); // serialize variable
+		}
+	} while (false);
+
 	SerializeOtherMember(obj);
 	writer.EndObject();
 }

@@ -2,6 +2,9 @@
 
 #include "detail/dynamic_reflection/TriMesh.inl"
 
+#define TINYOBJLOADER_IMPLEMENTATION // define this in only *one* .cc
+#include "_deps/tiny_obj_loader.h"
+
 using namespace Ubpa;
 using namespace std;
 
@@ -29,6 +32,10 @@ TriMesh::TriMesh(Type type) {
 	default:
 		break;
 	}
+}
+
+TriMesh::TriMesh(const string& path) {
+	Init(path);
 }
 
 // center : (0, 0, 0), side length: 2
@@ -170,6 +177,96 @@ void TriMesh::InitSquareMesh() {
 	Init(indices, positions, texcoords, normals);
 }
 
+bool TriMesh::Init(const string& path) {
+	vector<valu3> indices;
+	vector<pointf3> positions;
+	vector<pointf2> texcoords;
+	vector<normalf> normals;
+
+	map<tuple<size_t,size_t,size_t>, size_t> vertexIndexMap;
+
+	tinyobj::ObjReader objReader;
+	tinyobj::ObjReaderConfig config;
+	config.vertex_color = false;
+	bool success = objReader.ParseFromFile(path, config);
+	if (!success)
+		return false;
+
+	if (!objReader.Warning().empty()) {
+		std::cout << objReader.Warning() << std::endl;
+	}
+
+	if (!objReader.Error().empty()) {
+		std::cerr << objReader.Error() << std::endl;
+	}
+
+	if (!objReader.Valid()) {
+		return false;
+	}
+
+	tinyobj::attrib_t attrib = objReader.GetAttrib();
+	std::vector<tinyobj::shape_t> shapes = objReader.GetShapes();
+	//std::vector<tinyobj::material_t> materials;
+
+	// Loop over shapes
+	for (size_t s = 0; s < shapes.size(); s++) {
+		// Loop over faces(polygon)
+		size_t index_offset = 0;
+		for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
+			int fv = shapes[s].mesh.num_face_vertices[f];
+			if (fv != 3)
+				return false; // only support triangle mesh
+
+			valu3 face;
+			// Loop over vertices in the face.
+			for (size_t v = 0; v < fv; v++) {
+				// access to vertex
+				tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
+
+				auto key_idx = make_tuple(idx.vertex_index, idx.normal_index, idx.texcoord_index);
+				auto target = vertexIndexMap.find(key_idx);
+				if (target != vertexIndexMap.end()) {
+					face[v] = static_cast<unsigned>(target->second);
+					continue;
+				}
+
+				tinyobj::real_t vx = attrib.vertices[3 * idx.vertex_index + 0];
+				tinyobj::real_t vy = attrib.vertices[3 * idx.vertex_index + 1];
+				tinyobj::real_t vz = attrib.vertices[3 * idx.vertex_index + 2];
+				positions.emplace_back(vx, vy, vz);
+				if (idx.normal_index != -1) {
+					tinyobj::real_t nx = attrib.normals[3 * idx.normal_index + 0];
+					tinyobj::real_t ny = attrib.normals[3 * idx.normal_index + 1];
+					tinyobj::real_t nz = attrib.normals[3 * idx.normal_index + 2];
+					normals.emplace_back(nx, ny, nz);
+				}
+				if (idx.texcoord_index != -1) {
+					tinyobj::real_t tx = attrib.texcoords[2 * idx.texcoord_index + 0];
+					tinyobj::real_t ty = attrib.texcoords[2 * idx.texcoord_index + 1];
+					texcoords.emplace_back(tx, ty);
+				}
+				// Optional: vertex colors
+				// tinyobj::real_t red = attrib.colors[3*idx.vertex_index+0];
+				// tinyobj::real_t green = attrib.colors[3*idx.vertex_index+1];
+				// tinyobj::real_t blue = attrib.colors[3*idx.vertex_index+2];
+
+				face[v] = static_cast<unsigned>(positions.size() - 1);
+				vertexIndexMap[key_idx] = positions.size() - 1;
+			}
+			index_offset += fv;
+			indices.push_back(face);
+			// per-face material
+			//shapes[s].mesh.material_ids[f];
+		}
+	}
+
+	if (!Init(indices, positions, texcoords, normals))
+		return false;
+
+	this->path = path;
+	return true;
+}
+
 bool TriMesh::Init(const vector<valu3>& indices,
 	const vector<pointf3>& positions,
 	const vector<pointf2>& texcoords,
@@ -229,6 +326,7 @@ void TriMesh::Clear() {
 	tangents->clear();
 	triPool.Clear();
 	triangles->clear();
+	path->clear();
 }
 
 void TriMesh::GenNormals() {
@@ -320,6 +418,47 @@ void TriMesh::GenTangents() {
 		// Calculate handedness
 		tangents->at(i) *= (n.cross(t).dot(tanT[i]) < 0.0F) ? -1.f : 1.f;
 	}
+}
+
+bool TriMesh::SetAndSave(const std::string& path) {
+	ofstream objFile(path);
+	if (!objFile.is_open())
+		return false;
+	objFile << "# Created by UScene" << endl
+		<< "# " << endl
+		<< "# vertex: " << positions->size() << endl
+		<< "# normal: " << normals->size() << endl
+		<< "# texcoord: " << texcoords->size() << endl
+		<< "# triangle: " << triangles->size() << endl << endl;
+
+	for (const auto& pos : positions)
+		objFile << "v " << pos[0] << " " << pos[1] << " " << pos[2] << endl;
+	objFile << endl;
+
+	for (const auto& n : normals)
+		objFile << "vn " << n[0] << " " << n[1] << " " << n[2] << endl;
+	objFile << endl;
+
+	for (const auto& t : texcoords)
+		objFile << "vt " << t[0] << " " << t[1] << endl;
+	objFile << endl;
+	
+	for (auto tri : indices) {
+		tri[0] += 1;
+		tri[1] += 1;
+		tri[2] += 1;
+		objFile << "f "
+			<< tri[0] << "/" << tri[0] << "/" << tri[0] << " "
+			<< tri[1] << "/" << tri[1] << "/" << tri[1] << " "
+			<< tri[2] << "/" << tri[2] << "/" << tri[2] << " " << endl;
+	}
+	objFile << endl;
+
+	objFile.close();
+
+	this->path = path;
+
+	return true;
 }
 
 void TriMesh::OnRegist() {

@@ -33,7 +33,9 @@ tuple<rgbf, vecf3, float> EnvLight::Sample(const normalf& n) const noexcept {
 	assert(n.is_normalized());
 	auto vn = n.cast_to<vecf3>();
 	svecf s_wi = cos_weighted_on_hemisphere<float>().cast_to<svecf>();
-	vecf3 t{ 1,0,0 };
+	vecf3 t = 0.f;
+	t[n.min_dim()] = 1.f;
+	t[n.max_dim()] = 1.f;
 	t = (t - t.dot(vn) * vn).normalize();
 	vecf3 b = vn.cross(t);
 	vecf3 wi = svecf::TBN(vn, t) * s_wi;

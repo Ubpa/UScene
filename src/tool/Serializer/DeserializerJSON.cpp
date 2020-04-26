@@ -6,6 +6,7 @@
 #include <UScene/core/Light/Light.h>
 #include <UScene/core/Material/Material.h>
 #include <UScene/core/Material/Texture2D.h>
+#include <UScene/core/Primitive/TriMesh.h>
 
 #include <UDP/Reflection/ReflectionMngr.h>
 #include <UDP/Reflection/Reflection.h>
@@ -99,8 +100,24 @@ DeserializerJSON::DeserializerJSON() {
 		vector<pointf3>, vector<pointf2>, vector<normalf>, vector<vecf3>, vector<valu3>>();
 
 	RegistGenObj([](const rapidjson::Value* obj) {
-		string path = obj->FindMember("path")->value.GetString();
-		return new Texture2D{ path };
+		const auto& iter_path = obj->FindMember("path");
+		if (iter_path != obj->MemberEnd()) {
+			string path = iter_path->value.GetString();
+			if (!path.empty())
+				return new Texture2D{ path };
+		}
+
+		return new Texture2D;
+	});
+
+	RegistGenObj([](const rapidjson::Value* obj) {
+		const auto& iter_path = obj->FindMember("path");
+		if (iter_path != obj->MemberEnd()) {
+			string path = iter_path->value.GetString();
+			if (!path.empty())
+				return new TriMesh{ path };
+		}
+		return new TriMesh;
 	});
 }
 
@@ -147,16 +164,22 @@ void DeserializerJSON::ParseSObj(Scene* scene, SObj* sobj, const UJsonValue* val
 	}
 
 	sobj->name = (**value)["name"].GetString();
-	for (const auto& cmptObj : (**value)["Components"].GetArray()) {
-		auto cmpt = ReflectionMngr::Instance().Create(cmptObj["type"].GetString(), sobj);
-		auto val = UJsonValue(&cmptObj);
-		ParseObj(cmpt, &val);
+	auto iter_cmpts = (*value)->FindMember("Components");
+	if (iter_cmpts != (*value)->MemberEnd()) {
+		for (const auto& cmptObj : iter_cmpts->value.GetArray()) {
+			auto cmpt = ReflectionMngr::Instance().Create(cmptObj["type"].GetString(), sobj);
+			auto val = UJsonValue(&cmptObj);
+			ParseObj(cmpt, &val);
+		}
 	}
 
-	for (const auto& childObj : (**value)["children"].GetArray()) {
-		auto [child] = scene->CreateSObj(childObj["name"].GetString(), sobj);
-		auto val = UJsonValue(&childObj);
-		ParseSObj(scene, child, &val);
+	auto iter_children = (*value)->FindMember("children");
+	if (iter_children != (*value)->MemberEnd()) {
+		for (const auto& childObj : iter_children->value.GetArray()) {
+			auto [child] = scene->CreateSObj(childObj["name"].GetString(), sobj);
+			auto val = UJsonValue(&childObj);
+			ParseSObj(scene, child, &val);
+		}
 	}
 }
 

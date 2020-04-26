@@ -1,3 +1,10 @@
+UBPA_DOWNLOADZIP_PRO(
+	https://cdn.jsdelivr.net/gh/Ubpa/UData@master/UScene/tiny_obj_loader.zip
+	tiny_obj_loader.zip
+	${CMAKE_CURRENT_SOURCE_DIR}/Primitive/_deps
+	SHA256 5084FC75CD1783A68F6D9C136256C05919846DC6BB3075F55CF134A522ADB641
+)
+
 Ubpa_GlobGroupSrcs(RST sources PATHS
 	${CMAKE_CURRENT_SOURCE_DIR}
 	"${PROJECT_SOURCE_DIR}/include/UScene/core"
@@ -28,7 +35,7 @@ function(GenRefl dir)
 	)
 endfunction()
 
-if(false)
+if(true)
 GenRefl(Cmpt)
 GenRefl(Material)
 GenRefl(Light)
