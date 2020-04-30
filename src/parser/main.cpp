@@ -329,28 +329,28 @@ void WriteFile(const string& path, const std::vector<ClassMeta>& classMetas) {
 
     for (const auto& classMeta : classMetas) {
         file << "namespace " << classMeta.ns << "::detail::dynamic_reflection {" << endl;
-        file << "    void ReflRegist_" << classMeta.name << "() {" << endl;
+        file << "    void ReflRegister_" << classMeta.name << "() {" << endl;
         file << "        Reflection<" << classMeta.name << ">::Instance() // name : "
             << classMeta.type << " " << classMeta.ns << "::" << classMeta.name << endl;
         for (const auto& [k,v] : classMeta.attrs)
-            file << "            .Regist(\"" << k << "\", \"" << v << "\")"<< endl;
+            file << "            .Register(\"" << k << "\", \"" << v << "\")"<< endl;
         for (const auto& varmeta : classMeta.varmetas) {
             if (varmeta.prefix.find("static") != string::npos
                 || varmeta.prefix.find("constexpr") != string::npos)
             {
-                file << "            //.Regist(&" << classMeta.name << "::" << varmeta.name << ", \"" << varmeta.name << "\")"
+                file << "            //.Register(&" << classMeta.name << "::" << varmeta.name << ", \"" << varmeta.name << "\")"
                     " // " << varmeta.prefix << " " << varmeta.type << endl;
             }
             else {
-                file << "            .Regist(&" << classMeta.name << "::" << varmeta.name << ", \"" << varmeta.name << "\")"
+                file << "            .Register(&" << classMeta.name << "::" << varmeta.name << ", \"" << varmeta.name << "\")"
                     " // " << varmeta.prefix << " " << varmeta.type << endl;
             }
             for (const auto& [k, v] : varmeta.attrs)
-                file << "            .Regist(\"" << varmeta.name << "\", \"" << k << "\", \"" << (v.empty() ? null : v) << "\")" << endl;
+                file << "            .Register(\"" << varmeta.name << "\", \"" << k << "\", \"" << (v.empty() ? null : v) << "\")" << endl;
         }
         file << "            ;" << endl;
         file << "        if constexpr (std::is_base_of_v<Component, " << classMeta.name <<">) {" << endl;
-        file << "            Reflection<" << classMeta.name << ">::Instance().RegistConstructor([](SObj* sobj) {" << endl;
+        file << "            Reflection<" << classMeta.name << ">::Instance().RegisterConstructor([](SObj* sobj) {" << endl;
         file << "                if constexpr (std::is_base_of_v<Component, " << classMeta.name << ">) {" << endl;
         file << "                    if constexpr (Ubpa::detail::SObj_::IsNecessaryCmpt<" << classMeta.name << ">)" << endl;
         file << "                        return sobj->Get<" << classMeta.name << ">();" << endl;

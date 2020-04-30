@@ -53,6 +53,6 @@ rgbaf Texture2D::Sample(pointf2 uv) const {
 	}
 }
 
-void Texture2D::OnRegist() {
-	detail::dynamic_reflection::ReflRegist_Texture2D();
+void Texture2D::OnRegister() {
+	detail::dynamic_reflection::ReflRegister_Texture2D();
 }

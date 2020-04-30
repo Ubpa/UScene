@@ -28,6 +28,6 @@ namespace Ubpa {
 
 		void SetPath(const std::string& path);
 		rgbaf Sample(pointf2 uv) const;
-		static void OnRegist();
+		static void OnRegister();
 	};
 }

@@ -66,7 +66,7 @@ namespace Ubpa {
 		void GenNormals();
 		void GenTangents();
 
-		static void OnRegist();
+		static void OnRegister();
 
 	private:
 		Pool<Triangle> triPool;

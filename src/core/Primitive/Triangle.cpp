@@ -46,6 +46,6 @@ const bboxf3 Triangle::Box() const {
 	return b;
 }
 
-void Triangle::OnRegist() {
-	detail::dynamic_reflection::ReflRegist_Triangle();
+void Triangle::OnRegister() {
+	detail::dynamic_reflection::ReflRegister_Triangle();
 }

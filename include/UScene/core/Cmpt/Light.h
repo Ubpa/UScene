@@ -18,6 +18,6 @@ namespace Ubpa::Cmpt {
 
 		void SetLight(Ubpa::Light* light);
 
-		static void OnRegist();
+		static void OnRegister();
 	};
 }

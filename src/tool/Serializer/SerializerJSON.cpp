@@ -15,7 +15,7 @@ SerializerJSON::SerializerJSON() {
 	ReflTraitsIniter::Instance().Init(*this);
 
 	// regist all member variable type
-	VarPtrVisitor<SerializerJSON>::Regist<
+	VarPtrVisitor<SerializerJSON>::Register<
 		bool,
 		float, double,
 		int8_t, int16_t, int32_t, int64_t,
@@ -49,7 +49,7 @@ SerializerJSON::SerializerJSON() {
 		set<SObj*>,
 		vector<pointf3>, vector<pointf2>, vector<normalf>, vector<vecf3>, vector<valu3>>();
 
-	RegistSerializeOtherMember([this](UJsonWriter& writer, const SObj* sobj) {
+	RegisterSerializeOtherMember([this](UJsonWriter& writer, const SObj* sobj) {
 		writer.Key("Components");
 		writer.StartArray();
 		for (auto [cmpt, size] : sobj->Components())

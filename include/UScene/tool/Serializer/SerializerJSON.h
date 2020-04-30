@@ -23,10 +23,10 @@ namespace Ubpa {
 		
 		// argument must be (Ubpa::UJsonWriter&, const Obj*)
 		template<typename Func>
-		void RegistSerializeOtherMember(Func&& func);
+		void RegisterSerializeOtherMember(Func&& func);
 
 		template<typename Obj>
-		void RegistObjPtrMemVar();
+		void RegisterObjPtrMemVar();
 
 	protected:
 		void SerializeOtherMember(const void* obj);
@@ -99,7 +99,7 @@ namespace Ubpa {
 		std::map<const void*, std::function<void(const void*)>> callbacks; // key is vtable
 
 		using ReflTraitsVisitor::Visit;
-		using VarPtrVisitor<SerializerJSON>::Regist;
+		using VarPtrVisitor<SerializerJSON>::Register;
 	};
 }
 

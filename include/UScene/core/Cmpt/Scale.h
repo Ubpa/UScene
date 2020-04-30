@@ -9,6 +9,6 @@ namespace Ubpa::Cmpt {
 	public:
 		scalef3 value{ 1.f };
 
-		static void OnRegist();
+		static void OnRegister();
 	};
 }

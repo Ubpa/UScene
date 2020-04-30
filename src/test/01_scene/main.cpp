@@ -16,7 +16,7 @@ using namespace std;
 using namespace Ubpa;
 
 int main() {
-	Scene::OnRegist();
+	Scene::OnRegister();
 
 	Scene scene("scene");
 

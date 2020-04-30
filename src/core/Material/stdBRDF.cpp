@@ -10,8 +10,8 @@
 using namespace Ubpa;
 using namespace std;
 
-void stdBRDF::OnRegist() {
-	detail::dynamic_reflection::ReflRegist_stdBRDF();
+void stdBRDF::OnRegister() {
+	detail::dynamic_reflection::ReflRegister_stdBRDF();
 }
 
 const rgbf stdBRDF::Albedo(const pointf2& uv) const {

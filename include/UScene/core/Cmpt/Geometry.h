@@ -15,7 +15,7 @@ namespace Ubpa::Cmpt {
 		Geometry(Geometry&& geo) noexcept;
 		virtual ~Geometry();
 
-		static void OnRegist();
+		static void OnRegister();
 
 		void SetPrimitive(Primitive* primitive);
 	};

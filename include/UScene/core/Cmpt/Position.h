@@ -9,6 +9,6 @@ namespace Ubpa::Cmpt {
 	public:
 		pointf3 value{ 0.f };
 
-		static void OnRegist();
+		static void OnRegister();
 	};
 }

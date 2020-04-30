@@ -18,6 +18,6 @@ namespace Ubpa::Cmpt {
 
 		void SetMaterial(Ubpa::Material* material);
 
-		static void OnRegist();
+		static void OnRegister();
 	};
 }

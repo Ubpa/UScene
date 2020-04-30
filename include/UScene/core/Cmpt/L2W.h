@@ -15,7 +15,7 @@ namespace Ubpa::Cmpt {
 		[[not_serialize]]
 		Read<Root, transformf> value{ transformf::eye() };
 
-		static void OnRegist();
+		static void OnRegister();
 
 		const pointf3 WorldPos() const noexcept;
 		const quatf WorldRot() const noexcept;

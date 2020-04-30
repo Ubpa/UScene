@@ -13,7 +13,7 @@ namespace Ubpa::Cmpt {
 
 	class Root : public Component {
 	public:
-		static void OnRegist();
+		static void OnRegister();
 
 		void OnUpdate(const Transform* tsfm, L2W* l2w, const SObjPtr* ptr) const;
 	};

@@ -50,7 +50,7 @@ namespace Ubpa {
 		// Attach, Detach, Release, World::CreateEntity
 		void AddCommand(const std::function<void()>& command);
 
-		static void OnRegist();
+		static void OnRegister();
 	protected:
 		SObj() : entity{ nullptr } {}
 		SObj(Scene* scene, Entity* entity, const std::string& name);

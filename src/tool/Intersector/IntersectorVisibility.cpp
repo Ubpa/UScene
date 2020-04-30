@@ -30,7 +30,7 @@ IntersectorVisibility::IntersectorVisibility() {
 		return isIntersect;
 	};
 
-	visitor.Regist(intersect_square, intersect_sphere, intersect_tri);
+	visitor.Register(intersect_square, intersect_sphere, intersect_tri);
 }
 
 bool IntersectorVisibility::Visit(const BVH* bvh, rayf3 r) const {

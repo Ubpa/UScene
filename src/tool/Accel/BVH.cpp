@@ -28,7 +28,7 @@ class BVH::BVHInitializer : protected Visitor<void(BVH::BVHInitializer::*)
 		(BVH*, unordered_map<const Primitive*, bboxf3>&)>;
 
 public:
-	BVHInitializer() { Regist<Sphere, TriMesh, Square>(); }
+	BVHInitializer() { Register<Sphere, TriMesh, Square>(); }
 
 	static BVH::BVHInitializer& Instance() {
 		static BVH::BVHInitializer instance;

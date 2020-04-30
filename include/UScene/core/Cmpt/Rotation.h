@@ -9,6 +9,6 @@ namespace Ubpa::Cmpt {
 	public:
 		quatf value{ quatf::identity() };
 
-		static void OnRegist();
+		static void OnRegister();
 	};
 }

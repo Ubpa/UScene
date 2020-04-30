@@ -16,7 +16,7 @@ namespace Ubpa::Cmpt {
 		[[not_serialize]]
 		Read<Transform, transformf> value{ transformf::eye() };
 
-		static void OnRegist();
+		static void OnRegister();
 
 		void OnUpdate(const Position* p, const Rotation* r, const Scale* s);
 	};

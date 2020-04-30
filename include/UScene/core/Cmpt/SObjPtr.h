@@ -15,6 +15,6 @@ namespace Ubpa::Cmpt {
 		[[not_serialize]]
 		Read<Scene, SObj*> value{ nullptr };
 
-		static void OnRegist();
+		static void OnRegister();
 	};
 }

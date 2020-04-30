@@ -58,9 +58,9 @@ void SObj::AddCommand(const std::function<void()>& command) {
 	entity->AddCommand(command);
 }
 
-void SObj::OnRegist() {
+void SObj::OnRegister() {
 	SObj tmp;
 	SObj* ptmp = &tmp;
 	vtable_of<SObj>::regist(ptmp);
-	detail::dynamic_reflection::ReflRegist_SObj();
+	detail::dynamic_reflection::ReflRegister_SObj();
 }

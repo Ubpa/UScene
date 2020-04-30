@@ -7,8 +7,8 @@
 using namespace Ubpa;
 using namespace std;
 
-void Cmpt::Geometry::OnRegist() {
-	detail::dynamic_reflection::ReflRegist_Geometry();
+void Cmpt::Geometry::OnRegister() {
+	detail::dynamic_reflection::ReflRegister_Geometry();
 }
 
 Cmpt::Geometry::Geometry() = default;

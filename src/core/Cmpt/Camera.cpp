@@ -26,6 +26,6 @@ const Cmpt::Camera::CoordinateSystem Cmpt::Camera::GenCoordinateSystem(const tra
 	return rst;
 }
 
-void Cmpt::Camera::OnRegist() {
-	detail::dynamic_reflection::ReflRegist_Camera();
+void Cmpt::Camera::OnRegister() {
+	detail::dynamic_reflection::ReflRegister_Camera();
 }

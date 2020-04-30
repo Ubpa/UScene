@@ -7,6 +7,6 @@
 using namespace Ubpa;
 using namespace std;
 
-void Cmpt::Rotation::OnRegist() {
-	detail::dynamic_reflection::ReflRegist_Rotation();
+void Cmpt::Rotation::OnRegister() {
+	detail::dynamic_reflection::ReflRegister_Rotation();
 }

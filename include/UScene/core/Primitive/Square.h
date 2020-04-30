@@ -16,6 +16,6 @@ namespace Ubpa {
 		static constexpr float side_length{ 2.f };
 		static constexpr float area = side_length * side_length;
 
-		static void OnRegist();
+		static void OnRegister();
 	};
 }

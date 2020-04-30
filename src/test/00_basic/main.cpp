@@ -13,7 +13,7 @@ public:
 };
 
 int main() {
-	Scene::OnRegist();
+	Scene::OnRegister();
 
 	Scene scene("scene");
 

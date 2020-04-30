@@ -75,7 +75,7 @@ namespace Ubpa {
 		void* rstObj{ nullptr };
 
 		template<typename Func>
-		void RegistGenObj(Func&& func);
+		void RegisterGenObj(Func&& func);
 
 		// dynamic
 		std::map<std::string, std::function<void*(const UJsonValue* obj)>> type2func;

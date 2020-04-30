@@ -461,6 +461,6 @@ bool TriMesh::SetAndSave(const std::string& path) {
 	return true;
 }
 
-void TriMesh::OnRegist() {
-	detail::dynamic_reflection::ReflRegist_TriMesh();
+void TriMesh::OnRegister() {
+	detail::dynamic_reflection::ReflRegister_TriMesh();
 }

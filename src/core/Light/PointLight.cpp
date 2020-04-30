@@ -9,6 +9,6 @@ using namespace Ubpa;
 PointLight::PointLight(float intensity, const rgbf& color)
 	: intensity(intensity), color(color) {}
 
-void PointLight::OnRegist() {
-	detail::dynamic_reflection::ReflRegist_PointLight();
+void PointLight::OnRegister() {
+	detail::dynamic_reflection::ReflRegister_PointLight();
 }

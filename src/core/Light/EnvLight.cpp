@@ -46,6 +46,6 @@ float EnvLight::PDF(const vecf3& dir) const noexcept {
 	return 1 / (4 * PI<float>);
 }
 
-void EnvLight::OnRegist() {
-	detail::dynamic_reflection::ReflRegist_EnvLight();
+void EnvLight::OnRegister() {
+	detail::dynamic_reflection::ReflRegister_EnvLight();
 }

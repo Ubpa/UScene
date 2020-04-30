@@ -9,8 +9,8 @@
 
 using namespace Ubpa;
 
-void Cmpt::L2W::OnRegist() {
-	detail::dynamic_reflection::ReflRegist_L2W();
+void Cmpt::L2W::OnRegister() {
+	detail::dynamic_reflection::ReflRegister_L2W();
 }
 
 const pointf3 Cmpt::L2W::WorldPos() const noexcept {

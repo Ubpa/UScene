@@ -28,6 +28,6 @@ namespace Ubpa {
 
 		EnvLight(float intensity = 1.f, const rgbf& color = rgbf{ 1.f,1.f,1.f }, Texture2D* texture = nullptr);
 
-		static void OnRegist();
+		static void OnRegister();
 	};
 }

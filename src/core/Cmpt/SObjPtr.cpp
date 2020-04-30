@@ -7,6 +7,6 @@
 using namespace Ubpa;
 using namespace std;
 
-void Cmpt::SObjPtr::OnRegist() {
-	detail::dynamic_reflection::ReflRegist_SObjPtr();
+void Cmpt::SObjPtr::OnRegister() {
+	detail::dynamic_reflection::ReflRegister_SObjPtr();
 }

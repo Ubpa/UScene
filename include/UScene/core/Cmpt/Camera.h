@@ -19,7 +19,7 @@ namespace Ubpa::Cmpt {
 		[[pretty_name("field of view")]]
 		float fov{ Ubpa::to_radian(60.f) };
 		
-		static void OnRegist();
+		static void OnRegister();
 
 		struct CoordinateSystem {
 			pointf3 pos;
