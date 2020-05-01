@@ -24,9 +24,12 @@ rgbf EnvLight::Radiance(const vecf3& dir) const noexcept {
 }
 
 tuple<rgbf, vecf3, float> EnvLight::Sample() const noexcept {
-	// TODO
 	vecf3 wi = uniform_on_sphere<float>().cast_to<vecf3>();
 	return { Radiance(wi), wi, 1 / (4 * PI<float>) };
+}
+
+float EnvLight::PDF(const vecf3& dir) const noexcept {
+	return 1 / (4 * PI<float>);
 }
 
 tuple<rgbf, vecf3, float> EnvLight::Sample(const normalf& n) const noexcept {
@@ -42,8 +45,9 @@ tuple<rgbf, vecf3, float> EnvLight::Sample(const normalf& n) const noexcept {
 	return { Radiance(wi), wi, s_wi.cos_stheta() / PI<float> };
 }
 
-float EnvLight::PDF(const vecf3& dir) const noexcept {
-	return 1 / (4 * PI<float>);
+float EnvLight::PDF(const vecf3& dir, const normalf& n) const noexcept {
+	float cos_theta = dir.cos_theta(n.cast_to<vecf3>());
+	return cos_theta / PI<float>;
 }
 
 void EnvLight::OnRegister() {
