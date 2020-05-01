@@ -31,6 +31,6 @@ namespace Ubpa {
 
 	template<typename Obj>
 	void SerializerJSON::RegisterObjPtrMemVar() {
-		VarPtrVisitor<SerializerJSON>::Register<Obj*>();
+		VarPtrVisitor<void(SerializerJSON::*)()>::Register<Obj*>();
 	}
 }

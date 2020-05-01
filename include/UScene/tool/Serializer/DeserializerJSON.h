@@ -15,7 +15,7 @@ namespace Ubpa {
 	class UJsonValue;
 	class UJsonDoc;
 
-	class DeserializerJSON : public IDeserializer, public VarPtrVisitor<DeserializerJSON> {
+	class DeserializerJSON : public IDeserializer, public VarPtrVisitor<void(DeserializerJSON::*)()> {
 	public:
 		DeserializerJSON();
 

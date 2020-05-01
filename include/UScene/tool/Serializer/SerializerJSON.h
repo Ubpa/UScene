@@ -14,7 +14,8 @@ namespace Ubpa {
 	class Scene;
 	class SObj;
 
-	class SerializerJSON : public ISerializer, public ReflTraitsVisitor, public VarPtrVisitor<SerializerJSON> {
+	class SerializerJSON : public ISerializer, public ReflTraitsVisitor,
+		public VarPtrVisitor<void(SerializerJSON::*)()> {
 	public:
 		SerializerJSON();
 
@@ -99,7 +100,7 @@ namespace Ubpa {
 		std::map<const void*, std::function<void(const void*)>> callbacks; // key is vtable
 
 		using ReflTraitsVisitor::Visit;
-		using VarPtrVisitor<SerializerJSON>::Register;
+		using VarPtrVisitor<void(SerializerJSON::*)()>::Register;
 	};
 }
 
