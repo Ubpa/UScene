@@ -13,10 +13,12 @@ namespace Ubpa::Cmpt {
 	public:
 		[[info("width / height")]]
 		[[pretty_name("aspect ratio")]]
+		[[range("0,")]]
 		float ar{ 16.f / 9.f };
 
 		[[info("in verticle, in radian")]]
 		[[pretty_name("field of view")]]
+		[[range("0,3.14")]]
 		float fov{ Ubpa::to_radian(60.f) };
 		
 		static void OnRegister();

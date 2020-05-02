@@ -7,6 +7,7 @@
 namespace Ubpa {
 	// PointLight's radiance : intensity * color * delta(A)
 	struct PointLight : Light {
+		[[range("0,")]]
 		float intensity;
 		rgbf color;
 
