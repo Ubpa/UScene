@@ -262,6 +262,8 @@ __pycache__/
 
 # ----------------
 
+*_AutoRefl.inl
+
 *.jpg
 *.bmp
 *.gif
