@@ -8,9 +8,12 @@ using namespace Ubpa::UScene;
 using namespace Ubpa;
 using namespace std;
 
-struct PrintSystem {
-	static void OnUpdate(Schedule& s) {
-		s.Register([](const WorldToLocal* w2l, const LocalToWorld* l2w) {
+class PrintSystem : public System {
+public:
+	using System::System;
+
+	virtual void OnUpdate(Schedule& schedule) override {
+		schedule.Register([](const WorldToLocal* w2l, const LocalToWorld* l2w) {
 			l2w->value.print();
 			w2l->value.print();
 		}, "print");

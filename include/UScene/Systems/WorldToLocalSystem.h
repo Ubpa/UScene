@@ -4,8 +4,11 @@
 
 namespace Ubpa {
 	namespace UScene {
-		struct WorldToLocalSystem {
-			static void OnUpdate(UECS::Schedule& schedule);
+		class WorldToLocalSystem : public UECS::System {
+		public:
+			using System::System;
+
+			virtual void OnUpdate(UECS::Schedule& schedule) override;
 		};
 	}
 }
