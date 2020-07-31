@@ -1,6 +1,13 @@
 set(components
+  #LocalToParent
   LocalToWorld
+  #NonUniformScale
+  #Parent
+  Rotation
+  #RotationEuler
   Scale
+  Translation
+  WorldToLocal
 )
 
 set(refls "")
