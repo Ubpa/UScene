@@ -2,15 +2,13 @@
 
 #include <UECS/World.h>
 
-namespace Ubpa {
-	namespace UScene {
-		class RotationEulerSystem : public UECS::System {
-		public:
-			using System::System;
+namespace Ubpa::UScene {
+	class RotationEulerSystem : public UECS::System {
+	public:
+		using System::System;
 
-			static constexpr char SystemFuncName[] = "RotationEulerSystem";
+		static constexpr char SystemFuncName[] = "RotationEulerSystem";
 
-			virtual void OnUpdate(UECS::Schedule& schedule) override;
-		};
-	}
+		virtual void OnUpdate(UECS::Schedule& schedule) override;
+	};
 }

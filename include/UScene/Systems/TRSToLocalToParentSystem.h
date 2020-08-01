@@ -2,15 +2,13 @@
 
 #include <UECS/World.h>
 
-namespace Ubpa {
-	namespace UScene {
-		class TRSToLocalToParentSystem : public UECS::System {
-		public:
-			using System::System;
+namespace Ubpa::UScene {
+	class TRSToLocalToParentSystem : public UECS::System {
+	public:
+		using System::System;
 
-			static constexpr char SystemFuncName[] = "TRSToLocalToParentSystem";
+		static constexpr char SystemFuncName[] = "TRSToLocalToParentSystem";
 
-			virtual void OnUpdate(UECS::Schedule& schedule) override;
-		};
-	}
+		virtual void OnUpdate(UECS::Schedule& schedule) override;
+	};
 }

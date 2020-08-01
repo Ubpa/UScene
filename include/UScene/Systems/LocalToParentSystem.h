@@ -4,17 +4,15 @@
 
 #include <UGM/transform.h>
 
-namespace Ubpa {
-	namespace UScene {
-		class LocalToParentSystem : public UECS::System {
-		public:
-			using System::System;
+namespace Ubpa::UScene {
+	class LocalToParentSystem : public UECS::System {
+	public:
+		using System::System;
 
-			static constexpr char SystemFuncName[] = "LocalToParentSystem";
+		static constexpr char SystemFuncName[] = "LocalToParentSystem";
 
-			void ChildLocalToWorld(const transformf& parent_l2w, UECS::Entity e);
+		void ChildLocalToWorld(const transformf& parent_l2w, UECS::Entity e);
 
-			virtual void OnUpdate(UECS::Schedule& schedule) override;
-		};
-	}
+		virtual void OnUpdate(UECS::Schedule& schedule) override;
+	};
 }
