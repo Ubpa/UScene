@@ -22,12 +22,9 @@ public:
 
 int main() {
 	RTDCmptTraits::Instance().Register<
-		//LocalToParent,
 		LocalToWorld,
-		//NonUniformScale,
-		//Parent,
 		Rotation,
-		//RotationEuler,
+		RotationEuler,
 		Scale,
 		Translation,
 		WorldToLocal
@@ -38,12 +35,21 @@ int main() {
 	w.systemMngr.Register<
 		PrintSystem,
 		TRSToLocalToWorldSystem,
-		WorldToLocalSystem
+		WorldToLocalSystem,
+		RotationEulerSystem
 	>();
 
-	auto [e, w2l, l2w, t, r, s] = w.entityMngr.Create<WorldToLocal, LocalToWorld, Translation, Rotation, Scale>();
+	auto [e, w2l, l2w, t, r, s, re] = w.entityMngr.Create<
+		WorldToLocal,
+		LocalToWorld,
+		Translation,
+		Rotation,
+		Scale,
+		RotationEuler
+	>();
+
 	t->value = { 1, 0, 1 };
-	r->value = { vecf3{0,1,0}, to_radian(45.f) };
+	re->value = { 0.f, to_radian(45.f), 0.f };
 	s->value = 2.f;
 
 	w.Update();

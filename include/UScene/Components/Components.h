@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Children.h"
 #include "LocalToParent.h"
 #include "LocalToWorld.h"
 #include "NonUniformScale.h"

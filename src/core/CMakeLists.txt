@@ -1,10 +1,11 @@
 set(components
-  #LocalToParent
+  Children
+  LocalToParent
   LocalToWorld
   #NonUniformScale
-  #Parent
+  Parent
   Rotation
-  #RotationEuler
+  RotationEuler
   Scale
   Translation
   WorldToLocal

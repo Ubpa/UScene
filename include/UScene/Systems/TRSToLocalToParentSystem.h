@@ -4,11 +4,11 @@
 
 namespace Ubpa {
 	namespace UScene {
-		class TRSToLocalToWorldSystem : public UECS::System {
+		class TRSToLocalToParentSystem : public UECS::System {
 		public:
 			using System::System;
 
-			static constexpr const char SystemFuncName[] = "TRSToWorldToLocalSystem";
+			static constexpr char SystemFuncName[] = "TRSToLocalToParentSystem";
 
 			virtual void OnUpdate(UECS::Schedule& schedule) override;
 		};

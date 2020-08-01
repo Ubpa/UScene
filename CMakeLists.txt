@@ -8,7 +8,7 @@ Ubpa_InitUCMake()
 
 Ubpa_InitProject()
 
-Ubpa_AddDep(UECS   0.10.0)
+Ubpa_AddDep(UECS   0.10.1)
 Ubpa_AddDep(UGM    0.6.7 )
 Ubpa_AddDep(UDP    0.7.0 )
 Ubpa_AddDep(USRefl 0.5.0 )
